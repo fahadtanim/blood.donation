@@ -153,7 +153,7 @@ class DonorTable extends Component {
 			</div>
 
 			<div className="row">
-				<div className = "container" >
+				<div >
 					
 					<div className="row">
 						<div className="col s12">
