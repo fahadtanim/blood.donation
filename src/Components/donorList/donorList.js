@@ -1,7 +1,7 @@
 import { Bar } from 'react-chartjs-2';
 import M from "materialize-css";
 import React, { Component } from "react";
-// import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import ls from 'local-storage'
@@ -69,7 +69,7 @@ class DonorList extends Component {
                         <div className = "menu-container">
                             <button className="waves-effect waves-light btn">Leader</button>
                             <button className="waves-effect waves-light btn">Tester</button>
-                            <a href ="/donortable" className="waves-effect waves-light btn">Donor</a>>
+                            <NavLink to ="/donortable" className="waves-effect waves-light btn">Donor</NavLink>>
                             <button className="waves-effect waves-light btn">Admin</button>
                             
                         </div>

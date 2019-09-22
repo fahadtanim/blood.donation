@@ -30,7 +30,10 @@ class Home extends Component {
             });
           });
 
-          axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+          // axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+          axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users").then(result => {
+          console.log(result.data);
+      });
     }
 
    handleRegisterFormSubmit = () =>{
@@ -43,6 +46,7 @@ class Home extends Component {
         axios.post("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/signup/add/new", user).then(result => {
           console.log(result.data);
       });
+        
     }
 
     handleSignInFormSubmit = () =>{
@@ -61,8 +65,13 @@ class Home extends Component {
           let decoded =  jwt_decode(token);
           console.log(ls.get("user"));
           console.log(decoded);
-         
-          this.props.history.push("/donorlist");
+          if(decoded.role[0].roleName === "SUPER_ADMIN"){
+            this.props.history.push("/applieduser");
+          }
+          else{
+            this.props.history.push("/donorlist");
+          }
+          
         }
         
       })
@@ -182,7 +191,7 @@ class Home extends Component {
 				>
                 <a
 				  className="row waves-effect waves-light btn-large modal-trigger"
-				  href="#registerModal" onClick = {this.handleSignInFormSubmit}>Register</a>
+          href="#registerModal" >Register</a>
 			  </div>
 		<div className="col s12 m10 l10 center-align teal-text boyan-text">
 			<h6 className="center-align">Developed in Collaboration with Sandhani and Exhort</h6>
@@ -252,7 +261,7 @@ class Home extends Component {
             </div>
             <div className="modal-footer">
                 <div>
-                <button href="#!" className="modal-close waves-effect waves-teal btn-flat" onClick ={this.handleRegisterFormSubmit}>Register</button>
+                <button className="modal-close waves-effect waves-teal btn-flat" onClick ={this.handleRegisterFormSubmit}>Register</button>
                 </div>
             </div>
     </div>
