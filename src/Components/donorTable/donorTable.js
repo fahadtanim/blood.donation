@@ -56,7 +56,9 @@ class DonorTable extends Component {
       )
       .then(result => this.setState({ data: result.data }));
 
-    
+    document.getElementById("addNewBloodGroupForm").addEventListener("submit",(e)=>{
+        e.preventDefault();
+    })
   }
 
   componentDidUpdate = () => {
@@ -133,7 +135,7 @@ class DonorTable extends Component {
               </ul>
               <ul id="dropdown1" className="dropdown-content">
                 <li>
-                  <a href="#!">Add Blood Group</a>
+                  <a href="#addNewBloodGroup" className ="modal-trigger" data-target="addNewBloodGroupModal">Add Blood Group</a>
                 </li>
                 <li>
                   <a href="#!">Add Blood Elements</a>
@@ -376,22 +378,7 @@ class DonorTable extends Component {
         <div className="container">
           <div className="row">
           {this.handleBloodGroupList(this.state.blood_group)}
-            {/* <div className="menu-container">
-              <button className="waves-effect waves-light btn">A+</button>
-              <button className="waves-effect waves-light btn">A-</button>
-              <button className="waves-effect waves-light btn">B+</button>
-              <button className="waves-effect waves-light btn">B-</button>
-              <button className="waves-effect waves-light btn">O+</button>
-              <button className="waves-effect waves-light btn">O-</button>
-              <button className="waves-effect waves-light btn">AB+</button>
-              <button className="waves-effect waves-light btn">AB-</button>
-              <button
-                className="waves-effect waves-light btn modal-trigger"
-                data-target="addNewDonarModal"
-              >
-                Add New Donor
-              </button>
-            </div> */}
+            
           </div>
           <div className="row">
             <div id="test"></div>
@@ -415,6 +402,29 @@ class DonorTable extends Component {
             <p id="data-result" className="center-align"></p>
           </div>
         </div>
+        <div id = "addNewBloodGroupModal" className = "modal">
+            <div className = "modal-content">
+                <div className="container">
+                    <form className = "row" id="addNewBloodGroupForm">
+                        <div className="col s12">
+                        <label>Name of Blood Group:</label>
+                        <input
+                            id="new-blood-group-name"
+                            type="text"
+                            name="blood_group"
+                        />
+                        </div>
+                        <div className="col s12"><button
+                        className="btn waves-effect waves-light"
+                        onClick={this.handleFormSubmit}
+                      >
+                        Add Donor
+                      </button>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div id="addNewDonarModal" className="modal">
           <div className="modal-content">
             <div className="container">
@@ -435,7 +445,7 @@ class DonorTable extends Component {
                       <input
                         id="new-donor-name"
                         type="text"
-                        name="community_group"
+                        name="donor_name"
                       />
                     </div>
                   </div>
@@ -445,9 +455,10 @@ class DonorTable extends Component {
                       <input
                         id="new-donor-community-group"
                         type="text"
-                        name="name"
+                        name="community_group"
                       />
                     </div>
+                    
                   </div>
 
                   <div className="row">
