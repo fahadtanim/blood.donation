@@ -11,6 +11,7 @@ class DonorTable extends Component {
         
     };
     componentDidMount() {
+        console.log("donortable Component Mounted");
         // let token = ls.get("user");
         // console.log(token);
         this.setState({token : ls.get("user")});
@@ -33,6 +34,10 @@ class DonorTable extends Component {
           });
         axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => this.setState({data:result.data}));
     }
+
+    componentWillUnmount() {
+        console.log("donortable component unmounted");
+      }
 
     handleTablePrint = param =>{
         if(param === null || param === undefined){
