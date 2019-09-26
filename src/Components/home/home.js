@@ -92,6 +92,10 @@ class Home extends Component {
     console.log("home component unmounted");
   }
 
+  componentDidUpdate = ()=>{
+    let elems = document.querySelectorAll("select");
+    let instances = M.FormSelect.init(elems, {});
+  }
   handleRegisterFormSubmit = () => {
     let user = {
       user_name: document.getElementById("register_user_name").value,

@@ -78,6 +78,14 @@ class DonorList extends Component {
     //   });
     //   axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
   }
+  componentDidUpdate = () =>{
+    let elems = document.querySelectorAll('.dropdown-trigger');
+    let instances = M.Dropdown.init(elems, {
+        closeOnClick:true,
+      hover:true,
+      autoTrigger:true,
+      });
+  }
 
   handleLogOut = () => {
     ls.set("user", null);
