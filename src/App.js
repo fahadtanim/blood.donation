@@ -10,8 +10,8 @@ import AppliedUser from "./Components/appliedUser/appliedUser";
 function App() {
   return (
     <BrowserRouter>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/home" component={Home} />
+      <Route exact path="/(home|)" component={Home} />
+      {/* <Route exact path="/home" component={Home} /> */}
       <Route exact path="/donorlist" component={DonorList} />
       <Route exact path="/donortable" component={DonorTable} />
       <Route exact path="/applieduser" component={AppliedUser} />

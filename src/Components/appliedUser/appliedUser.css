@@ -1,0 +1,23 @@
+.logout-btn:hover{
+    background-color: #fff;
+    color: rgb(38, 166, 154);
+}
+.logout-btn{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #fff;
+    align-self: center;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    transition: 0.3s;
+    background: none;
+    cursor: pointer;
+}
+
+.dropdown-content{
+    min-width: 250px;
+    max-width: 350px;
+    width: 100%;
+}

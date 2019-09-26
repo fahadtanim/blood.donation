@@ -1,0 +1,38 @@
+.header-bar-container{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+.header-bar .container, .header-bar .row, .header-bar > .container> .row >.col{
+    height: 100%;
+}
+
+.sign-in-btn{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #fff;
+    align-self: center;
+    transition: 0.3s;
+    margin-right: 15px;
+}
+
+.sign-in-btn:hover, .sign-up-btn:hover{
+    background-color: #fff;
+    color: rgb(38, 166, 154);
+}
+.sign-up-btn{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #fff;
+    align-self: center;
+    border: 1px solid #fff;
+    border-radius: 3px;
+    transition: 0.3s;
+    background: none;
+}
