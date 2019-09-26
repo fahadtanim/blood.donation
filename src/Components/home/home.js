@@ -36,7 +36,7 @@ class Home extends Component {
     // axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
     axios
       .get(
-        "https://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
       )
       .then(result => {
         console.log(result.data);
@@ -56,7 +56,7 @@ class Home extends Component {
     };
     axios
       .post(
-        "https://139.59.91.220:8080/bloodbank/api/bloodBank/v1/signup/add/new",
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/signup/add/new",
         user
       )
       .then(result => {
@@ -73,7 +73,7 @@ class Home extends Component {
     console.log(user);
     axios
       .post(
-        "https://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/login",
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/login",
         user
       )
       .then(result => {
