@@ -76,7 +76,7 @@ class DonorList extends Component {
     //       }
     //     });
     //   });
-    //   axios.get("https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+    //   axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
   }
   componentDidUpdate = () => {
     let elems = document.querySelectorAll(".dropdown-trigger");

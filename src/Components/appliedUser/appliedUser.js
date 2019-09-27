@@ -28,7 +28,7 @@ class AppliedUser extends Component {
     }
     axios
       .get(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
       )
       .then(result => {
         this.setState({ data: result.data });
@@ -61,7 +61,7 @@ class AppliedUser extends Component {
   getAppliedUser = () => {
     axios
       .get(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
       )
       .then(result => {
         this.setState({ data: result.data });
@@ -95,7 +95,7 @@ class AppliedUser extends Component {
               onClick={() =>
                 axios
                   .put(
-                    "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/approve/" +
+                    "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/approve/" +
                       data.user_id
                   )
                   .then(result => {

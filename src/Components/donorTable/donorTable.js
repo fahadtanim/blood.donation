@@ -31,7 +31,7 @@ class DonorTable extends Component {
     }
     axios
       .get(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/blood/group/all"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/all"
       )
       .then(result => {
         console.log(result);
@@ -56,7 +56,7 @@ class DonorTable extends Component {
     });
     axios
       .get(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/all/doners"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners"
       )
       .then(result => this.setState({ data: result.data }));
 
@@ -280,13 +280,13 @@ class DonorTable extends Component {
     if (value == 0) {
       axios
         .get(
-          "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/all/doners"
+          "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners"
         )
         .then(result => this.setState({ data: result.data }));
     } else {
       axios
         .get(
-          "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/by/group/" +
+          "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/by/group/" +
             value
         )
         .then(result => this.setState({ data: result.data }));
@@ -335,7 +335,7 @@ class DonorTable extends Component {
     console.log(donor);
     axios
       .post(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/add",
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/add",
         donor
       )
       .then(result => console.log(result));

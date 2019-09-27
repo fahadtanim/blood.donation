@@ -51,10 +51,10 @@ class Home extends Component {
       }
     });
     let bg = { blood_group: "A-" };
-    // axios.post("https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/blood/group/add",bg).then(result => console.log(result));
+    // axios.post("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/add",bg).then(result => console.log(result));
     axios
       .get(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/blood/group/all"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/all"
       )
       .then(result => {
         console.log(result);
@@ -63,7 +63,7 @@ class Home extends Component {
 
     axios
       .get(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/blood/element/all"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/element/all"
       )
       .then(result => {
         this.setState({ blood_elements: result.data });
@@ -71,16 +71,16 @@ class Home extends Component {
 
     axios
       .get(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/search/location/location"
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/search/location/location"
       )
       .then(result => {
         this.setState({ location: result.data });
       });
 
-    // axios.get("https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+    // axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
     // axios
     //   .get(
-    //     "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+    //     "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
     //   )
     //   .then(result => {
     //     console.log(result.data);
@@ -104,7 +104,7 @@ class Home extends Component {
     };
     axios
       .post(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/signup/add/new",
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/signup/add/new",
         user
       )
       .then(result => {
@@ -121,7 +121,7 @@ class Home extends Component {
     // console.log(user);
     axios
       .post(
-        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/login",
+        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/login",
         user
       )
       .then(result => {
