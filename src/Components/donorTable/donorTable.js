@@ -9,6 +9,10 @@ import "./donorTable.css";
 
 class DonorTable extends Component {
   state = {};
+  constructor(props) {
+    super(props);
+    this.handleSearchByBloodGroup = this.handleSearchByBloodGroup.bind(this);
+  }
   componentDidMount() {
     console.log("donortable Component Mounted");
     // let token = ls.get("user");
@@ -56,9 +60,11 @@ class DonorTable extends Component {
       )
       .then(result => this.setState({ data: result.data }));
 
-    document.getElementById("addNewBloodGroupForm").addEventListener("submit",(e)=>{
+    document
+      .getElementById("addNewBloodGroupForm")
+      .addEventListener("submit", e => {
         e.preventDefault();
-    })
+      });
   }
 
   componentDidUpdate = () => {
@@ -72,15 +78,14 @@ class DonorTable extends Component {
         elem.checked = false;
         elem.style.display = "none";
       }
-      
     });
 
-    elems = document.querySelectorAll('.dropdown-trigger');
-     instances = M.Dropdown.init(elems, {
-        closeOnClick:true,
-      hover:true,
-      autoTrigger:true,
-      });
+    elems = document.querySelectorAll(".dropdown-trigger");
+    instances = M.Dropdown.init(elems, {
+      closeOnClick: true,
+      hover: true,
+      autoTrigger: true
+    });
 
     elems = document.querySelectorAll("select");
     instances = M.FormSelect.init(elems, {});
@@ -135,7 +140,13 @@ class DonorTable extends Component {
               </ul>
               <ul id="dropdown1" className="dropdown-content">
                 <li>
-                  <a href="#addNewBloodGroup" className ="modal-trigger" data-target="addNewBloodGroupModal">Add Blood Group</a>
+                  <a
+                    href="#addNewBloodGroup"
+                    className="modal-trigger"
+                    data-target="addNewBloodGroupModal"
+                  >
+                    Add Blood Group
+                  </a>
                 </li>
                 <li>
                   <a href="#!">Add Blood Elements</a>
@@ -254,17 +265,32 @@ class DonorTable extends Component {
     return <tbody id="data-input-field">{donorList}</tbody>;
   };
 
-  handleSearchByBloodGroup = param => {
-    console.log(param);
-    if (param === null || param === undefined) {
+  handleSearchByBloodGroup = () => {
+    // console.log(param);
+    let elem = document.getElementById("filter-donor-blood-group");
+    console.log(elem);
+    if (elem === null || elem === undefined) {
       return;
     }
-    axios
-      .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/by/group/" +
-          param
-      )
-      .then(result => this.setState({ data: result.data }));
+    let value = elem.value;
+    console.log("value : " + value);
+    if (value === null || value === undefined) {
+      return;
+    }
+    if (value == 0) {
+      axios
+        .get(
+          "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners"
+        )
+        .then(result => this.setState({ data: result.data }));
+    } else {
+      axios
+        .get(
+          "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/by/group/" +
+            value
+        )
+        .then(result => this.setState({ data: result.data }));
+    }
   };
 
   toggleAll = () => {
@@ -317,21 +343,21 @@ class DonorTable extends Component {
 
   handleBloodGroupList = param => {
     if (param === null || param === undefined || param === "") {
-        return;
-      }
-      let data = param.data;
-      console.log(data);
-      if (data.length == 0) {
-        return;
-      }
-      var bloodGroupList = data.map(function(data, index) {
+      return;
+    }
+    let data = param.data;
+    console.log(data);
+    if (data.length == 0) {
+      return;
+    }
+    var bloodGroupList = data.map((data, index) => {
       return (
         <button
           className="waves-effect waves-light btn"
           key={data.id}
-          onClick={() =>
-            this.handleSearchByBloodGroup.bind(this, data.blood_group)
-          }
+          onClick={() => {
+            this.handleSearchByBloodGroup(data.blood_group);
+          }}
         >
           {data.blood_group}
         </button>
@@ -377,8 +403,55 @@ class DonorTable extends Component {
         <div className="row header-bar">{this.handleNav(this.state)}</div>
         <div className="container">
           <div className="row">
-          {this.handleBloodGroupList(this.state.blood_group)}
-            
+            {/* {this.handleBloodGroupList(this.state.blood_group)} */}
+            <div className="col s3">
+              <label htmlFor="blood-group">Blood Group:</label>
+              <select
+                name="blood-group"
+                id="filter-donor-blood-group"
+                defaultValue="0"
+              >
+                <option value="0">All</option>
+                {this.handleBloodGroupOption(this.state.blood_group)}
+              </select>
+              <button
+                className="wave-effect wave-teal btn"
+                onClick={this.handleSearchByBloodGroup}
+              >
+                Filter
+              </button>
+            </div>
+            <div className="col s6">
+              <div className="row">
+                <div className="col s6">
+                  <label htmlFor="blood-group">Blood Group:</label>
+                  <select
+                    name="blood-group"
+                    id="filter-combo-donor-blood-group"
+                    defaultValue="0"
+                  >
+                    <option value="0">All</option>
+                    {this.handleBloodGroupOption(this.state.blood_group)}
+                  </select>
+                </div>
+                <div className="col s6">
+                  <label htmlFor="date">Last Donation:</label>
+                  <input
+                    id="filter-combo-donor-donation-date"
+                    type="date"
+                    name="ld"
+                  />
+                </div>
+              </div>
+              <div className="row">
+                <button
+                  className="wave-effect wave-teal btn col"
+                  onClick={this.handleSearchByBloodGroup}
+                >
+                  Filter
+                </button>
+              </div>
+            </div>
           </div>
           <div className="row">
             <div id="test"></div>
@@ -402,28 +475,29 @@ class DonorTable extends Component {
             <p id="data-result" className="center-align"></p>
           </div>
         </div>
-        <div id = "addNewBloodGroupModal" className = "modal">
-            <div className = "modal-content">
-                <div className="container">
-                    <form className = "row" id="addNewBloodGroupForm">
-                        <div className="col s12">
-                        <label>Name of Blood Group:</label>
-                        <input
-                            id="new-blood-group-name"
-                            type="text"
-                            name="blood_group"
-                        />
-                        </div>
-                        <div className="col s12"><button
-                        className="btn waves-effect waves-light"
-                        onClick={this.handleFormSubmit}
-                      >
-                        Add Donor
-                      </button>
-                      </div>
-                    </form>
+        <div id="addNewBloodGroupModal" className="modal">
+          <div className="modal-content">
+            <div className="container">
+              <form className="row" id="addNewBloodGroupForm">
+                <div className="col s12">
+                  <label>Name of Blood Group:</label>
+                  <input
+                    id="new-blood-group-name"
+                    type="text"
+                    name="blood_group"
+                  />
                 </div>
+                <div className="col s12">
+                  <button
+                    className="btn waves-effect waves-light"
+                    onClick={this.handleFormSubmit}
+                  >
+                    Add Donor
+                  </button>
+                </div>
+              </form>
             </div>
+          </div>
         </div>
         <div id="addNewDonarModal" className="modal">
           <div className="modal-content">
@@ -458,7 +532,6 @@ class DonorTable extends Component {
                         name="community_group"
                       />
                     </div>
-                    
                   </div>
 
                   <div className="row">
@@ -513,7 +586,9 @@ class DonorTable extends Component {
                         id="new-donor-blood-group"
                         defaultValue="0"
                       >
-                          <option value = "0" disabled>ex : A+</option>
+                        <option value="0" disabled>
+                          ex : A+
+                        </option>
                         {this.handleBloodGroupOption(this.state.blood_group)}
                       </select>
                     </div>
