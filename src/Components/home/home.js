@@ -54,6 +54,7 @@ class Home extends Component {
     axios
       .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/group/all")
       .then(result => {
+        console.log("blood group");
         console.log(result);
         this.setState({ blood_group: result.data });
       });
@@ -61,6 +62,8 @@ class Home extends Component {
     axios
       .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/element/all")
       .then(result => {
+        console.log("blood element");
+        console.log(result);
         this.setState({ blood_elements: result.data });
       });
 
@@ -148,13 +151,14 @@ class Home extends Component {
     if (data.length == 0) {
       return;
     }
-    var bloodGroupList = data.map(function(data, index) {
+    var bloodElementList = data.map(function(data, index) {
       return (
         <option key={index} value={data.element_name}>
           {data.element_name}
         </option>
       );
     });
+    return <React.Fragment>{bloodElementList}</React.Fragment>;
   };
 
   handleBloodGroupOption = param => {
@@ -307,7 +311,7 @@ class Home extends Component {
                       <option value="0" disabled>
                         e.g. Whole Blood/Apheresis Platelets/FFP etc
                       </option>
-                      {this.handleBloodElementOption()}
+                      {this.handleBloodElementOption(this.state.blood_elements)}
                       {this.handleSelectBtn(this.state)}
                     </select>
                   </div>
