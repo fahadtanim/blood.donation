@@ -76,16 +76,16 @@ class DonorList extends Component {
     //       }
     //     });
     //   });
-    //   axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+    //   axios.get("https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
   }
-  componentDidUpdate = () =>{
-    let elems = document.querySelectorAll('.dropdown-trigger');
+  componentDidUpdate = () => {
+    let elems = document.querySelectorAll(".dropdown-trigger");
     let instances = M.Dropdown.init(elems, {
-        closeOnClick:true,
-      hover:true,
-      autoTrigger:true,
-      });
-  }
+      closeOnClick: true,
+      hover: true,
+      autoTrigger: true
+    });
+  };
 
   handleLogOut = () => {
     ls.set("user", null);
@@ -114,13 +114,15 @@ class DonorList extends Component {
                 <li>
                   <NavLink to="/donortable">Donor Table</NavLink>
                 </li>
-                
+
                 <li>
-                  <a className="dropdown-trigger" href="#!" data-target="dropdown1">
+                  <a
+                    className="dropdown-trigger"
+                    href="#!"
+                    data-target="dropdown1"
+                  >
                     Other
-                    <i className="material-icons right">
-                      arrow_drop_down
-                    </i>
+                    <i className="material-icons right">arrow_drop_down</i>
                   </a>
                 </li>
                 <li>
@@ -225,9 +227,7 @@ class DonorList extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="row header-bar">
-        {this.handleNav(this.state)}
-        </div>
+        <div className="row header-bar">{this.handleNav(this.state)}</div>
         <div className="container">
           <div className="row">
             <div className="menu-container">

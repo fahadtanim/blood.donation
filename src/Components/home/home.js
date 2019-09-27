@@ -25,12 +25,11 @@ class Home extends Component {
       this.setState({ logged_in: true });
     }
 
-    if(tk){
+    if (tk) {
       let dc = jwt_decode(tk);
-      if(dc.role[0].roleName === "SUPER_ADMIN"){
+      if (dc.role[0].roleName === "SUPER_ADMIN") {
         window.location.href = "/applieduser";
-      }
-      else{
+      } else {
         window.location.href = "/donorlist";
       }
     }
@@ -52,10 +51,10 @@ class Home extends Component {
       }
     });
     let bg = { blood_group: "A-" };
-    // axios.post("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/add",bg).then(result => console.log(result));
+    // axios.post("https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/blood/group/add",bg).then(result => console.log(result));
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/all"
+        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/blood/group/all"
       )
       .then(result => {
         console.log(result);
@@ -64,7 +63,7 @@ class Home extends Component {
 
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/element/all"
+        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/blood/element/all"
       )
       .then(result => {
         this.setState({ blood_elements: result.data });
@@ -72,16 +71,16 @@ class Home extends Component {
 
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/search/location/location"
+        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/search/location/location"
       )
       .then(result => {
         this.setState({ location: result.data });
       });
 
-    // axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+    // axios.get("https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
     // axios
     //   .get(
-    //     "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+    //     "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
     //   )
     //   .then(result => {
     //     console.log(result.data);
@@ -92,10 +91,10 @@ class Home extends Component {
     console.log("home component unmounted");
   }
 
-  componentDidUpdate = ()=>{
+  componentDidUpdate = () => {
     let elems = document.querySelectorAll("select");
     let instances = M.FormSelect.init(elems, {});
-  }
+  };
   handleRegisterFormSubmit = () => {
     let user = {
       user_name: document.getElementById("register_user_name").value,
@@ -105,7 +104,7 @@ class Home extends Component {
     };
     axios
       .post(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/signup/add/new",
+        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/signup/add/new",
         user
       )
       .then(result => {
@@ -122,7 +121,7 @@ class Home extends Component {
     // console.log(user);
     axios
       .post(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/login",
+        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/login",
         user
       )
       .then(result => {
@@ -131,7 +130,7 @@ class Home extends Component {
         if (result.data.status === "OK") {
           ls.set("user", token);
           let decoded = jwt_decode(token);
-          this.setState({logged_in :true});
+          this.setState({ logged_in: true });
           console.log(ls.get("user"));
           console.log(decoded);
           if (decoded.role[0].roleName === "SUPER_ADMIN") {
@@ -195,16 +194,14 @@ class Home extends Component {
     console.log("came");
   };
 
-  handleLogOut(){
+  handleLogOut() {
     console.log("test");
-    ls.set("user",null);
-    this.setState({logged_in:false})
+    ls.set("user", null);
+    this.setState({ logged_in: false });
   }
 
-  toggleLoginBtn = param=>{
-    if (
-      param.logged_in == false
-    ) {
+  toggleLoginBtn = param => {
+    if (param.logged_in == false) {
       return (
         <div className="header-bar-container">
           <a className="sign-in-btn modal-trigger" href="#signInModal">
@@ -215,18 +212,18 @@ class Home extends Component {
           </a>
         </div>
       );
-    }
-    else{
+    } else {
       return;
     }
-  }
+  };
   toggleLogoutBtn = param => {
-    if (
-      param.logged_in == true
-    ) {
+    if (param.logged_in == true) {
       return (
         <div className="header-bar-container">
-          <button className="sign-up-btn" onClick = {this.handleLogOut.bind(this)}>
+          <button
+            className="sign-up-btn"
+            onClick={this.handleLogOut.bind(this)}
+          >
             Log Out
           </button>
         </div>
@@ -234,8 +231,6 @@ class Home extends Component {
     }
   };
 
-
-  
   render() {
     return (
       <React.Fragment>

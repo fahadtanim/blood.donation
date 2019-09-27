@@ -28,40 +28,40 @@ class AppliedUser extends Component {
     }
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
       )
       .then(result => {
         this.setState({ data: result.data });
       });
     var elems = document.querySelectorAll(".sidenav");
     var instances = M.Sidenav.init(elems, {});
-     elems = document.querySelectorAll('.dropdown-trigger');
-     instances = M.Dropdown.init(elems, {});
-     document.addEventListener('DOMContentLoaded', function() {
-      elems = document.querySelectorAll('.dropdown-trigger');
+    elems = document.querySelectorAll(".dropdown-trigger");
+    instances = M.Dropdown.init(elems, {});
+    document.addEventListener("DOMContentLoaded", function() {
+      elems = document.querySelectorAll(".dropdown-trigger");
       instances = M.Dropdown.init(elems, {
-        closeOnClick:true,
-      hover:true,
-      autoTrigger:true
+        closeOnClick: true,
+        hover: true,
+        autoTrigger: true
       });
     });
   };
 
-  componentDidUpdate = () =>{
-    let elems = document.querySelectorAll('.dropdown-trigger');
+  componentDidUpdate = () => {
+    let elems = document.querySelectorAll(".dropdown-trigger");
     let instances = M.Dropdown.init(elems, {
-      closeOnClick:true,
-      hover:true,
-      autoTrigger:true
+      closeOnClick: true,
+      hover: true,
+      autoTrigger: true
     });
     elems = document.querySelectorAll(".sidenav");
     instances = M.Sidenav.init(elems, {});
-  }
-  
+  };
+
   getAppliedUser = () => {
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+        "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
       )
       .then(result => {
         this.setState({ data: result.data });
@@ -95,7 +95,7 @@ class AppliedUser extends Component {
               onClick={() =>
                 axios
                   .put(
-                    "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/approve/" +
+                    "https://139.59.91.220:8443/bloodbank/api/bloodBank/v1/exhort/approve/" +
                       data.user_id
                   )
                   .then(result => {
@@ -142,13 +142,15 @@ class AppliedUser extends Component {
                 <li>
                   <NavLink to="/donortable">Donor Table</NavLink>
                 </li>
-                
+
                 <li>
-                  <a className="dropdown-trigger" href="#!" data-target="dropdown1">
+                  <a
+                    className="dropdown-trigger"
+                    href="#!"
+                    data-target="dropdown1"
+                  >
                     Other
-                    <i className="material-icons right">
-                      arrow_drop_down
-                    </i>
+                    <i className="material-icons right">arrow_drop_down</i>
                   </a>
                 </li>
                 <li>
