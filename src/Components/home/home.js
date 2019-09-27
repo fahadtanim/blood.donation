@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 import ls from "local-storage";
 import { Redirect } from "react-router";
 import "./home.css";
+import { config } from "../../services/config";
 class Home extends Component {
   state = {};
   constructor(props) {
@@ -14,9 +15,7 @@ class Home extends Component {
   componentDidMount() {
     console.log("home component mounted");
 
-    // document.addEventListener("DOMContentLoaded", function() {
-
-    // });
+    // console.log(config);
     let tk = ls.get("user");
     console.log(tk);
     if (tk === null) {
@@ -51,36 +50,32 @@ class Home extends Component {
       }
     });
     let bg = { blood_group: "A-" };
-    // axios.post("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/add",bg).then(result => console.log(result));
+    // axios.post(config.apiUrl+"/bloodbank/api/bloodBank/v1/blood/group/add",bg).then(result => console.log(result));
     axios
-      .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/all"
-      )
+      .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/group/all")
       .then(result => {
         console.log(result);
         this.setState({ blood_group: result.data });
       });
 
     axios
-      .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/element/all"
-      )
+      .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/element/all")
       .then(result => {
         this.setState({ blood_elements: result.data });
       });
 
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/search/location/location"
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/search/location/location"
       )
       .then(result => {
         this.setState({ location: result.data });
       });
 
-    // axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+    // axios.get(config.apiUrl+"/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
     // axios
     //   .get(
-    //     "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+    //     config.apiUrl+"/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
     //   )
     //   .then(result => {
     //     console.log(result.data);
@@ -103,12 +98,13 @@ class Home extends Component {
       org_name: document.getElementById("register_org_name").value
     };
     axios
-      .post(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/signup/add/new",
-        user
-      )
+      .post(config.apiUrl + "/bloodbank/api/bloodBank/v1/signup/add/new", user)
       .then(result => {
-        console.log(result.data);
+        // console.log(result.data);
+        M.toast({
+          html:
+            "The Form has been submitted! Please Wait for Approval. We will notify you through mail!"
+        });
       });
   };
 
@@ -120,10 +116,7 @@ class Home extends Component {
 
     // console.log(user);
     axios
-      .post(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/login",
-        user
-      )
+      .post(config.apiUrl + "/bloodbank/api/bloodBank/v1/exhort/login", user)
       .then(result => {
         let token = result.data.data;
 

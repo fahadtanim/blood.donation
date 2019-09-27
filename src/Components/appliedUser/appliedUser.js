@@ -4,6 +4,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import ls from "local-storage";
 import { NavLink } from "react-router-dom";
+import { config } from "../../services/config";
 import "./appliedUser.css";
 
 class AppliedUser extends Component {
@@ -28,7 +29,8 @@ class AppliedUser extends Component {
     }
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+        config.apiUrl +
+          "/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
       )
       .then(result => {
         this.setState({ data: result.data });
@@ -58,10 +60,33 @@ class AppliedUser extends Component {
     instances = M.Sidenav.init(elems, {});
   };
 
+  handleApprove = user_id => {
+    axios
+      .put(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/exhort/approve/" + user_id
+      )
+      .then(result => {
+        console.log(result);
+        if (result.data.status === "OK") {
+          axios
+            .get(
+              config.apiUrl +
+                "/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+            )
+            .then(result => {
+              this.setState({ data: result.data });
+            });
+        } else {
+          console.log(result);
+        }
+      });
+  };
+
   getAppliedUser = () => {
     axios
       .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
+        config.apiUrl +
+          "/bloodbank/api/bloodBank/v1/exhort/get/all/unapproved/users"
       )
       .then(result => {
         this.setState({ data: result.data });
@@ -83,7 +108,7 @@ class AppliedUser extends Component {
       return;
     }
     document.getElementById("data-result").innerHTML = "";
-    var donorList = data.map(function(data, index) {
+    var donorList = data.map((data, index) => {
       return (
         <tr key={index}>
           <td>{data.user_name}</td>
@@ -92,18 +117,20 @@ class AppliedUser extends Component {
           <td>
             <button
               className="waves-effect waves-light btn-large"
-              onClick={() =>
-                axios
-                  .put(
-                    "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/exhort/approve/" +
-                      data.user_id
-                  )
-                  .then(result => {
-                    console.log(result);
-                    if (result.data.status === "OK") {
-                      this.getAppliedUser();
-                    }
-                  })
+              onClick={
+                () => this.handleApprove(data.user_id)
+                // axios
+                //   .put(
+                //     config.apiUrl +
+                //       "/bloodbank/api/bloodBank/v1/exhort/approve/" +
+                //       data.user_id
+                //   )
+                //   .then(result => {
+                //     console.log(result);
+                //     if (result.data.status === "OK") {
+                //       this.getAppliedUser();
+                //     }
+                //   })
               }
             >
               Approve

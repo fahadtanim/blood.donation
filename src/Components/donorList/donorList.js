@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { config } from "../../services/config";
 import ls from "local-storage";
 import "./donorList.css";
 class DonorList extends Component {
@@ -76,7 +77,7 @@ class DonorList extends Component {
     //       }
     //     });
     //   });
-    //   axios.get("http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
+    //   axios.get(config.apiUrl+"/bloodbank/api/bloodBank/v1/doner/all/doners").then(result => console.log(result.data));
   }
   componentDidUpdate = () => {
     let elems = document.querySelectorAll(".dropdown-trigger");

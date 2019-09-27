@@ -3,6 +3,7 @@ import M from "materialize-css";
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
+import { config } from "../../services/config";
 import jwt_decode from "jwt-decode";
 import ls from "local-storage";
 import "./donorTable.css";
@@ -30,9 +31,7 @@ class DonorTable extends Component {
       this.setState({ role: "OA" });
     }
     axios
-      .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/blood/group/all"
-      )
+      .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/group/all")
       .then(result => {
         console.log(result);
         this.setState({ blood_group: result.data });
@@ -55,9 +54,7 @@ class DonorTable extends Component {
       instances = M.FormSelect.init(elems, {});
     });
     axios
-      .get(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners"
-      )
+      .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
       .then(result => this.setState({ data: result.data }));
 
     document
@@ -279,15 +276,12 @@ class DonorTable extends Component {
     }
     if (value == 0) {
       axios
-        .get(
-          "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/all/doners"
-        )
+        .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
         .then(result => this.setState({ data: result.data }));
     } else {
       axios
         .get(
-          "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/by/group/" +
-            value
+          config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/by/group/" + value
         )
         .then(result => this.setState({ data: result.data }));
     }
@@ -334,10 +328,7 @@ class DonorTable extends Component {
     };
     console.log(donor);
     axios
-      .post(
-        "http://139.59.91.220:8080/bloodbank/api/bloodBank/v1/doner/add",
-        donor
-      )
+      .post(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/add", donor)
       .then(result => console.log(result));
   };
 
