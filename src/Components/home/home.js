@@ -270,7 +270,7 @@ class Home extends Component {
         <div className="container">
           <div className="row">
             <div className="col s12 m12 l12">
-              <div className="card white darken-1">
+              <div className="card white darken-0">
                 <div className="card-content z-depth-0 red-text">
                   <span className="card-title center">
                     BLOOD DONATION REDUCES RISK OF CANCER, HYPERTENSION AND

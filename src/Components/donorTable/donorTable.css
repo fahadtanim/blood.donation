@@ -5,3 +5,11 @@
 .add-new-donor-btn {
   margin-top: 28px;
 }
+
+#right-btn-container {
+  max-width: 350px;
+  min-width: 250px;
+  position: absolute;
+  z-index: 1000;
+  display: none;
+}

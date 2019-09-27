@@ -7,6 +7,7 @@ import { config } from "../../services/config";
 import jwt_decode from "jwt-decode";
 import ls from "local-storage";
 import "./donorTable.css";
+import { exportDefaultSpecifier } from "@babel/types";
 
 class DonorTable extends Component {
   state = {};
@@ -36,6 +37,14 @@ class DonorTable extends Component {
         console.log(result);
         this.setState({ blood_group: result.data });
       });
+
+    axios
+      .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/community/all")
+      .then(result => {
+        console.log("community group : ");
+        console.log(result);
+        this.setState({ community_group: result.data });
+      });
     // console.log();
     document.getElementById("add-new-donor-date").innerHTML = new Date();
     document.addEventListener("DOMContentLoaded", function() {
@@ -57,11 +66,11 @@ class DonorTable extends Component {
       .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
       .then(result => this.setState({ data: result.data }));
 
-    document
-      .getElementById("addNewBloodGroupForm")
-      .addEventListener("submit", e => {
-        e.preventDefault();
-      });
+    // document
+    //   .getElementById("addNewBloodGroupForm")
+    //   .addEventListener("submit", e => {
+    //     e.preventDefault();
+    //   });
   }
 
   componentDidUpdate = () => {
@@ -93,6 +102,81 @@ class DonorTable extends Component {
     window.location.href = "/";
   };
 
+  handleAddBloodGroup = () => {
+    let bloodGroup = {
+      blood_group: document.getElementById("new-blood-group-name").value
+    };
+    axios
+      .post(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/group/add",
+        bloodGroup
+      )
+      .then(result => {
+        if (result.data.status === "OK") {
+          M.toast({ html: "Blood Group Add" });
+          axios
+            .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/group/all")
+            .then(result => {
+              // console.log(result);
+              this.setState({ blood_group: result.data });
+            });
+        } else {
+          M.toast({ html: "Couldn't Add Blood Group" });
+        }
+      });
+  };
+  handleAddBloodElement = () => {
+    let bloodElement = {
+      element_name: document.getElementById("new-blood-element-name").value
+    };
+    axios
+      .post(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/element/add",
+        bloodElement
+      )
+      .then(result => {
+        if (result.data.status === "OK") {
+          M.toast({ html: "Blood Element Added" });
+          axios
+            .get(
+              config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/element/all"
+            )
+            .then(result => {
+              // console.log("blood element");
+              // console.log(result);
+              this.setState({ blood_elements: result.data });
+            });
+        } else {
+          M.toast({ html: "Couldn't Add Blood Element" });
+        }
+      });
+  };
+  handleAddCommunity = () => {
+    let community = {
+      community_name: document.getElementById("new-community-group-name").value
+    };
+    console.log("community :");
+    console.log(community);
+    axios
+      .post(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/community/add",
+        community
+      )
+      .then(result => {
+        if (result.data.status === "OK") {
+          M.toast({ html: "Community Group Added" });
+          axios
+            .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/community/all")
+            .then(result => {
+              console.log("community group : ");
+              console.log(result);
+              this.setState({ community_group: result.data });
+            });
+        } else {
+          M.toast({ html: "Couldn't Add Community Group" });
+        }
+      });
+  };
   handleNav = param => {
     if (param.role == "SA") {
       return (
@@ -135,6 +219,78 @@ class DonorTable extends Component {
                   </button>
                 </li>
               </ul>
+              <div id="addNewBloodGroupModal" className="modal">
+                <div className="modal-content">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col s12">
+                        <label>Name of Blood Group:</label>
+                        <input
+                          id="new-blood-group-name"
+                          type="text"
+                          name="blood_group"
+                        />
+                      </div>
+                      <div className="col s12">
+                        <button
+                          className="btn waves-effect waves-light modal-close"
+                          onClick={this.handleAddBloodGroup}
+                        >
+                          Add Blood Group
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="addNewBloodElementModal" className="modal">
+                <div className="modal-content">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col s12">
+                        <label>Name of Blood Element:</label>
+                        <input
+                          id="new-blood-element-name"
+                          type="text"
+                          name="blood_element"
+                        />
+                      </div>
+                      <div className="col s12">
+                        <button
+                          className="btn waves-effect waves-light modal-close"
+                          onClick={this.handleAddBloodElement}
+                        >
+                          Add Blood Element
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="addNewCommunityModal" className="modal">
+                <div className="modal-content">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col s12">
+                        <label>Name of Blood Community:</label>
+                        <input
+                          id="new-community-group-name"
+                          type="text"
+                          name="community_group"
+                        />
+                      </div>
+                      <div className="col s12">
+                        <button
+                          className="btn waves-effect waves-light modal-close"
+                          onClick={this.handleAddCommunity}
+                        >
+                          Add Community
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <ul id="dropdown1" className="dropdown-content">
                 <li>
                   <a
@@ -146,7 +302,22 @@ class DonorTable extends Component {
                   </a>
                 </li>
                 <li>
-                  <a href="#!">Add Blood Elements</a>
+                  <a
+                    href="#addNewBloodElement"
+                    className="modal-trigger"
+                    data-target="addNewBloodElementModal"
+                  >
+                    Add Blood Elements
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#addNewCommunity"
+                    className="modal-trigger"
+                    data-target="addNewCommunityModal"
+                  >
+                    Add Community Group
+                  </a>
                 </li>
               </ul>
               <ul className="sidenav" id="mobile-demo">
@@ -242,9 +413,12 @@ class DonorTable extends Component {
       return;
     }
     document.getElementById("data-result").innerHTML = "";
-    let donorList = data.map(function(data, index) {
+    let donorList = data.map((data, index) => {
       return (
-        <tr key={index}>
+        <tr
+          key={index}
+          onContextMenu={e => this.handleRightButtonClick(e, data)}
+        >
           <td>{data.doner_name}</td>
           <td>{data.first_address}</td>
           <td>{data.middle_address}</td>
@@ -262,6 +436,14 @@ class DonorTable extends Component {
     return <tbody id="data-input-field">{donorList}</tbody>;
   };
 
+  handleRightButtonClick = (event, param) => {
+    event.preventDefault();
+    let elem = document.getElementById("right-btn-container");
+    elem.style.top = this.mouseY(event) + "px";
+    elem.style.left = this.mouseX(event) + "px";
+    elem.style.display = "block";
+    console.log(param);
+  };
   handleSearchByBloodGroup = () => {
     // console.log(param);
     let elem = document.getElementById("filter-donor-blood-group");
@@ -287,18 +469,49 @@ class DonorTable extends Component {
     }
   };
 
-  toggleAll = () => {
+  handleToggleNumOfDonation = () => {
     // alert("hjkhj");
+    let numOfElem = document.getElementById(
+      "new-donor-num-of-previous-donation"
+    );
+    if (numOfElem === undefined || numOfElem === null) {
+      return;
+    }
     let elem = document.getElementById("onPrevDon1");
-    elem.style.display = elem.style.display === "none" ? "block" : "none";
+    elem.style.display = numOfElem.checked == true ? "block" : "none";
 
     elem = document.getElementById("onPrevDon2");
-    elem.style.display = elem.style.display === "none" ? "block" : "none";
+    elem.style.display = numOfElem.checked == true ? "block" : "none";
   };
 
   handleFormSubmit = () => {
     let decode = jwt_decode(this.state.token);
     console.log(decode);
+    let screening_state = "";
+    let rejectedFor = "";
+    if (
+      document.getElementById("new-donor-screening-accepted").checked === true
+    ) {
+      screening_state = "Accepted";
+      rejectedFor = "";
+    } else if (
+      document.getElementById("new-donor-screening-rejected").checked === true
+    ) {
+      screening_state = "Rejected";
+      let rejElem = document.getElementsByClassName("rejected-for-chk");
+      for (let i = 0; i < rejElem.length; i++) {
+        if (rejElem[i].checked) {
+          if (rejectedFor.length == 0) {
+            rejectedFor += rejElem[i].value;
+          } else {
+            rejectedFor += "," + rejElem[i].value;
+          }
+        }
+      }
+    } else {
+      screening_state = "NotDone";
+      rejectedFor = "";
+    }
     let donor = {
       doner_name: document.getElementById("new-donor-name").value,
       first_address: document.getElementById("new-donor-first-address").value,
@@ -306,30 +519,64 @@ class DonorTable extends Component {
       last_address: document.getElementById("new-donor-last-address").value,
       mobile_number: document.getElementById("new-donor-mobile-number").value,
       email: document.getElementById("new-donor-email").value,
-      community_group: document.getElementById("new-donor-community-group")
+      comunity_group: document.getElementById("new-donor-community-group")
         .value,
+      dob: document.getElementById("new-donor-birth-date").value,
       blood_group: document.getElementById("new-donor-blood-group").value,
       previous_donation: document.getElementById(
         "new-donor-no-previous-donation"
       ).checked
         ? false
         : true,
+
       number_of_previous_donation: document.getElementById(
         "new-donor-no-previous-donation"
       ).checked
         ? "0"
         : document.getElementById("new-donor-total-num-previous-donation")
             .value,
-      donation_data: document.getElementById("new-donor-no-previous-donation")
+      donation_date: document.getElementById("new-donor-no-previous-donation")
         .checked
-        ? null
+        ? ""
         : document.getElementById("new-donor-last-previous-donation").value,
-      user_id: decode.id
+      user_id: decode.id,
+      screening_result: screening_state,
+      screening_value: rejectedFor
     };
+    console.log("from form");
     console.log(donor);
+    // let test = {
+    //   doner_name: "first",
+    //   first_address: "first",
+    //   middle_address: "middle",
+    //   last_address: "last",
+    //   mobile_number: "016845647997516",
+    //   email: "testasdas@gmail.com",
+    //   comunity_group: "du",
+    //   blood_group: "B+ve",
+    //   previous_donation: false,
+    //   number_of_previous_donation: "2",
+    //   donation_date: "2019-09-18",
+    //   dob: "2019-09-18",
+    //   screening_result: "Rejected",
+    //   screening_value: "A,b,C",
+    //   user_id: 1
+    // };
+    // console.log(test);
     axios
       .post(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/add", donor)
-      .then(result => console.log(result));
+      .then(result => {
+        if (result.data.status == "OK") {
+          M.toast({ html: "Donor Added Successfully" });
+          axios
+            .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
+            .then(result => this.setState({ data: result.data }));
+        }
+      });
+
+    // axios
+    //   .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
+    //   .then(result => this.setState({ data: result.data }));
   };
 
   handleBloodGroupList = param => {
@@ -354,6 +601,7 @@ class DonorTable extends Component {
         </button>
       );
     });
+
     return (
       <div className="menu-container">
         {bloodGroupList}
@@ -376,7 +624,7 @@ class DonorTable extends Component {
     if (data.length == 0) {
       return;
     }
-    var bloodGroupList = data.map(function(data, index) {
+    var bloodGroupList = data.map((data, index) => {
       return (
         <option key={index} value={data.blood_group}>
           {data.blood_group}
@@ -386,6 +634,73 @@ class DonorTable extends Component {
 
     console.log(param);
     return <React.Fragment>{bloodGroupList}</React.Fragment>;
+  };
+
+  handleScreeningToggle = () => {
+    let elem = document.getElementById("new-donor-screening-rejected");
+    if (elem === null || elem === undefined) {
+      return;
+    }
+
+    let elemRej = document.getElementById("new-donor-screening-rejected-for");
+    if (elem === null || elem === undefined) {
+      return;
+    }
+
+    elemRej.style.display = elem.checked === true ? "block" : "none";
+  };
+
+  handleCommunityGroupOption = param => {
+    console.log(this.state);
+    if (param === null || param === undefined || param === "") {
+      return;
+    }
+    let data = param.data;
+    console.log("in handle CommunityGroup");
+    console.log(data);
+    if (data.length == 0) {
+      return;
+    }
+    var communityGroupList = data.map((data, index) => {
+      return (
+        <option key={index} value={data.community_name}>
+          {data.community_name}
+        </option>
+      );
+    });
+
+    console.log(param);
+    return <React.Fragment>{communityGroupList}</React.Fragment>;
+  };
+
+  mouseY = evt => {
+    if (evt.pageY) {
+      return evt.pageY;
+    } else if (evt.clientY) {
+      return (
+        evt.clientY +
+        (document.documentElement.scrollTop
+          ? document.documentElement.scrollTop
+          : document.body.scrollTop)
+      );
+    } else {
+      return null;
+    }
+  };
+
+  mouseX = evt => {
+    if (evt.pageX) {
+      return evt.pageX;
+    } else if (evt.clientX) {
+      return (
+        evt.clientX +
+        (document.documentElement.scrollLeft
+          ? document.documentElement.scrollLeft
+          : document.body.scrollLeft)
+      );
+    } else {
+      return null;
+    }
   };
 
   render() {
@@ -476,30 +791,20 @@ class DonorTable extends Component {
             <p id="data-result" className="center-align"></p>
           </div>
         </div>
-        <div id="addNewBloodGroupModal" className="modal">
-          <div className="modal-content">
-            <div className="container">
-              <form className="row" id="addNewBloodGroupForm">
-                <div className="col s12">
-                  <label>Name of Blood Group:</label>
-                  <input
-                    id="new-blood-group-name"
-                    type="text"
-                    name="blood_group"
-                  />
-                </div>
-                <div className="col s12">
-                  <button
-                    className="btn waves-effect waves-light"
-                    onClick={this.handleFormSubmit}
-                  >
-                    Add Donor
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+        <div id="right-btn-container">
+          <ul>
+            <li>
+              <a className="btn btn-flat">Donate to Patient</a>
+            </li>
+            <li>
+              <a className="btn btn-flat">Go to Freezer</a>
+            </li>
+            <li>
+              <a className="btn btn-flat">Go to test</a>
+            </li>
+          </ul>
         </div>
+
         <div id="addNewDonarModal" className="modal">
           <div className="modal-content">
             <div className="container">
@@ -526,12 +831,19 @@ class DonorTable extends Component {
                   </div>
                   <div className="row">
                     <div className="col s12">
-                      <label>community Group:</label>
-                      <input
+                      <label htmlFor="blood-group">Community:</label>
+                      <select
+                        name="community-group"
                         id="new-donor-community-group"
-                        type="text"
-                        name="community_group"
-                      />
+                        defaultValue="0"
+                      >
+                        <option value="0" disabled>
+                          ex : DU
+                        </option>
+                        {this.handleCommunityGroupOption(
+                          this.state.community_group
+                        )}
+                      </select>
                     </div>
                   </div>
 
@@ -578,7 +890,17 @@ class DonorTable extends Component {
                       />
                     </div>
                   </div>
-
+                  <div className="row">
+                    <div className="col s12">
+                      <label htmlFor="">E-mail:</label>
+                      <input
+                        id="new-donor-email"
+                        type="email"
+                        name="email"
+                        placeholder="example@abc.com"
+                      />
+                    </div>
+                  </div>
                   <div className="row">
                     <div className="col s12">
                       <label htmlFor="blood-group">Blood Group:</label>
@@ -597,6 +919,13 @@ class DonorTable extends Component {
 
                   <div className="row">
                     <div className="col s12">
+                      <label htmlFor="date">Birth Date:</label>
+                      <input id="new-donor-birth-date" type="date" name="bd" />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col s12">
                       <label htmlFor="">Previous Donation:</label>
                       <p>
                         <label>
@@ -604,7 +933,7 @@ class DonorTable extends Component {
                             id="new-donor-no-previous-donation"
                             type="radio"
                             name="prevDon"
-                            onClick={this.toggleAll}
+                            onClick={this.handleToggleNumOfDonation}
                             defaultChecked
                           />
                           <span>No Previous Donation</span>
@@ -616,7 +945,7 @@ class DonorTable extends Component {
                             id="new-donor-num-of-previous-donation"
                             type="radio"
                             name="prevDon"
-                            onClick={this.toggleAll}
+                            onClick={this.handleToggleNumOfDonation}
                           />
                           <span>N/O Previous Donation</span>
                         </label>
@@ -655,23 +984,111 @@ class DonorTable extends Component {
                       />
                     </div>
                   </div>
-
+                  {/* Screening RADIO BUTTON */}
                   <div className="row">
                     <div className="col s12">
-                      <label htmlFor="">E-mail:</label>
-                      <input
-                        id="new-donor-email"
-                        type="email"
-                        name="email"
-                        placeholder="example@abc.com"
-                      />
+                      <label htmlFor="">Screening:</label>
+                      <p>
+                        <label>
+                          <input
+                            id="new-donor-screening-accepted"
+                            type="radio"
+                            name="screening"
+                            onClick={this.handleScreeningToggle}
+                            defaultChecked
+                          />
+                          <span>Screening Done & Accepted</span>
+                        </label>
+                      </p>
+                      <p>
+                        <label>
+                          <input
+                            id="new-donor-screening-rejected"
+                            type="radio"
+                            name="screening"
+                            onClick={this.handleScreeningToggle}
+                          />
+                          <span>Screening Done & Rejected</span>
+                        </label>
+                      </p>
+                      <p>
+                        <label>
+                          <input
+                            id="new-donor-screening-not-done"
+                            type="radio"
+                            name="screening"
+                            onClick={this.handleScreeningToggle}
+                          />
+                          <span>Screening Not Done</span>
+                        </label>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div
+                    className="row"
+                    id="new-donor-screening-rejected-for"
+                    style={{ display: "none" }}
+                  >
+                    <div className="col s12">
+                      <label htmlFor="">Rejected for:</label>
+                      <p>
+                        <label>
+                          <input
+                            type="checkbox"
+                            value="HBs Ag Positive"
+                            className="filled-in rejected-for-chk"
+                          />
+                          <span>HBs Ag Positive</span>
+                        </label>
+                      </p>
+                      <p>
+                        <label>
+                          <input
+                            type="checkbox"
+                            value="Anti HCV Positive"
+                            className="filled-in rejected-for-chk"
+                          />
+                          <span>Anti HCV Positive</span>
+                        </label>
+                      </p>
+                      <p>
+                        <label>
+                          <input
+                            type="checkbox"
+                            value="HIV Positive"
+                            className="filled-in rejected-for-chk"
+                          />
+                          <span>HIV Positive</span>
+                        </label>
+                      </p>
+                      <p>
+                        <label>
+                          <input
+                            type="checkbox"
+                            value="VDRL Positive"
+                            className="filled-in rejected-for-chk"
+                          />
+                          <span>VDRL Positive</span>
+                        </label>
+                      </p>
+                      <p>
+                        <label>
+                          <input
+                            type="checkbox"
+                            value="MP Positive"
+                            className="filled-in rejected-for-chk"
+                          />
+                          <span>MP Positive</span>
+                        </label>
+                      </p>
                     </div>
                   </div>
 
                   <div className="row">
                     <div className="col s12">
                       <button
-                        className="btn waves-effect waves-light"
+                        className="btn waves-effect waves-light modal-close"
                         onClick={this.handleFormSubmit}
                       >
                         Add Donor
