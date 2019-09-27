@@ -45,6 +45,7 @@ class DonorTable extends Component {
         console.log(result);
         this.setState({ community_group: result.data });
       });
+
     // console.log();
     document.getElementById("add-new-donor-date").innerHTML = new Date();
     document.addEventListener("DOMContentLoaded", function() {
@@ -71,6 +72,16 @@ class DonorTable extends Component {
     //   .addEventListener("submit", e => {
     //     e.preventDefault();
     //   });
+    axios
+      .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/element/all")
+      .then(result => {
+        console.log("blood element");
+        console.log(result);
+        this.setState({ blood_elements: result.data });
+      });
+    document.addEventListener("click", () => {
+      document.getElementById("right-btn-container").style.display = "none";
+    });
   }
 
   componentDidUpdate = () => {
@@ -201,11 +212,7 @@ class DonorTable extends Component {
                 </li>
 
                 <li>
-                  <a
-                    className="dropdown-trigger"
-                    href="#!"
-                    data-target="dropdown1"
-                  >
+                  <a className="dropdown-trigger" data-target="dropdown1">
                     Other
                     <i className="material-icons right">arrow_drop_down</i>
                   </a>
@@ -438,7 +445,12 @@ class DonorTable extends Component {
 
   handleRightButtonClick = (event, param) => {
     event.preventDefault();
+    // console.log(param);
     let elem = document.getElementById("right-btn-container");
+    this.setState({
+      donor_id: param.doner_id,
+      donor_blood_group: param.blood_group
+    });
     elem.style.top = this.mouseY(event) + "px";
     elem.style.left = this.mouseX(event) + "px";
     elem.style.display = "block";
@@ -615,6 +627,25 @@ class DonorTable extends Component {
     );
   };
 
+  handleBloodElementOption = param => {
+    if (param === null || param === undefined || param === "") {
+      return;
+    }
+    let data = param.data;
+    console.log(data);
+    if (data.length == 0) {
+      return;
+    }
+    var bloodElementList = data.map(function(data, index) {
+      return (
+        <option key={index} value={data.element_name}>
+          {data.element_name}
+        </option>
+      );
+    });
+    return <React.Fragment>{bloodElementList}</React.Fragment>;
+  };
+
   handleBloodGroupOption = param => {
     if (param === null || param === undefined || param === "") {
       return;
@@ -703,6 +734,63 @@ class DonorTable extends Component {
     }
   };
 
+  handleToggleRecieverContact = () => {
+    let ownInfoElem = document.getElementById("reciever-own-contact");
+    let recieverRelativeInfoElem = document.getElementById(
+      "reciever-relative-contact-number"
+    );
+    let recieverRelativeRelElem = document.getElementById(
+      "reciever-relative-contact-relation"
+    );
+
+    let queElem = document.getElementById("reciever-can-provide");
+    ownInfoElem.style.display = queElem.checked === true ? "block" : "none";
+    recieverRelativeInfoElem.style.display =
+      queElem.checked === true ? "none" : "block";
+    recieverRelativeRelElem.style.display =
+      queElem.checked === true ? "none" : "block";
+  };
+
+  handleRecieverForm = () => {
+    let decode = jwt_decode(this.state.token);
+    let reciever = {
+      bloodGroup: document.getElementById("reciever-taken-blood-group").value,
+      bloodProduct: document.getElementById("reciever-blood-element").value,
+      mobileNumber:
+        document.getElementById("reciever-can-provide").checked === true
+          ? document.getElementById("reciever-mobile-number").value
+          : "",
+      takingMobileNumber:
+        document.getElementById("reciever-can-provide").checked === true
+          ? ""
+          : document.getElementById("reciever-relative-mobile-number").value,
+      relation:
+        document.getElementById("reciever-can-provide").checked === true
+          ? ""
+          : document.getElementById("reciever-relative-relation").value,
+      email: document.getElementById("reciever-email").value,
+      bloodReason: document.getElementById("reciever-reason").value,
+      hospital: document.getElementById("reciever-place-name"),
+      labRef: document.getElementById("reciever-lab-ref-no"),
+      numberOdBag: document.getElementById("reciever-bag-no"),
+      userId: decode.id
+    };
+
+    console.log("from reciever form :");
+    console.log(reciever);
+    axios
+      .post(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/receiver/add",
+        reciever
+      )
+      .then(result => {
+        console.log(result);
+        if (result.data.status === "OK") {
+          M.toast({ html: "Reciever Added Succesfully" });
+        }
+      });
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -771,7 +859,7 @@ class DonorTable extends Component {
           </div>
           <div className="row">
             <div id="test"></div>
-            <table className="highlight centered col s12">
+            <table id="donor-list-table" className="highlight centered col s12">
               <thead>
                 <tr>
                   <th>Name</th>
@@ -791,18 +879,184 @@ class DonorTable extends Component {
             <p id="data-result" className="center-align"></p>
           </div>
         </div>
-        <div id="right-btn-container">
-          <ul>
-            <li>
-              <a className="btn btn-flat">Donate to Patient</a>
-            </li>
-            <li>
-              <a className="btn btn-flat">Go to Freezer</a>
-            </li>
-            <li>
-              <a className="btn btn-flat">Go to test</a>
-            </li>
-          </ul>
+        <div id="right-btn-container" className="collection">
+          <a
+            className="collection-item modal-trigger"
+            data-target="donateToPatientModal"
+          >
+            Donate to Patient
+          </a>
+          <a href="#!" className="collection-item">
+            Add to Freezer
+          </a>
+          <a href="#!" className="collection-item">
+            Screening
+          </a>
+        </div>
+
+        <div id="donateToPatientModal" className="modal">
+          <div className="modal-content">
+            <div className="container">
+              <div className="row">
+                <h5 className="subheader col s12">Reciever Information</h5>
+                <div className="col s12">
+                  <label htmlFor="reciever-taken-bg">Blood Group:</label>
+                  <input
+                    disabled
+                    id="reciever-taken-blood-group"
+                    type="text"
+                    name="reciever-taken-bg"
+                    value={this.state.donor_blood_group}
+                  />
+                </div>
+                <div className="col s12">
+                  <label htmlFor="blood-group">Blood Products:</label>
+                  <select
+                    name="blood-group"
+                    id="reciever-blood-element"
+                    defaultValue="0"
+                  >
+                    <option value="0" disabled>
+                      ex : Whole Blood
+                    </option>
+                    {this.handleBloodElementOption(this.state.blood_elements)}
+                  </select>
+                </div>
+                <div className="col s12">
+                  <label htmlFor="">Can Patient Provide Own Number:</label>
+                  <div className="row">
+                    <p className="col s6">
+                      <label>
+                        <input
+                          id="reciever-can-provide"
+                          type="radio"
+                          name="que"
+                          onClick={this.handleToggleRecieverContact}
+                          defaultChecked
+                        />
+                        <span>Yes</span>
+                      </label>
+                    </p>
+                    <p className="col s6">
+                      <label>
+                        <input
+                          id="reciever-cant-provide"
+                          type="radio"
+                          name="que"
+                          onClick={this.handleToggleRecieverContact}
+                        />
+                        <span>NO</span>
+                      </label>
+                    </p>
+                  </div>
+                </div>
+                <div className="col s12" id="reciever-own-contact">
+                  <label htmlFor="mobile-number">
+                    Patient's Mobile Number:
+                  </label>
+                  <input
+                    type="text"
+                    name="mobile-number"
+                    id="reciever-mobile-number"
+                    placeholder="ex : +8801533556677"
+                  />
+                </div>
+                <div
+                  className="col s12"
+                  id="reciever-relative-contact-number"
+                  style={{ display: "none" }}
+                >
+                  <label htmlFor="mobile-number">
+                    Mobile Number of Person Taking Blood:
+                  </label>
+                  <input
+                    type="text"
+                    name="mobile-number"
+                    id="reciever-relative-mobile-number"
+                    placeholder="ex : +8801533556677"
+                  />
+                </div>
+                <div
+                  className="col s12"
+                  id="reciever-relative-contact-relation"
+                  style={{ display: "none" }}
+                >
+                  <label>Relation with Patient:</label>
+                  <input
+                    id="reciever-relative-relation"
+                    type="text"
+                    name="donor_name"
+                  />
+                </div>
+                <div className="col s12">
+                  <label htmlFor="">Patient's / Reciever's E-mail:</label>
+                  <input
+                    id="reciever-email"
+                    type="email"
+                    name="email"
+                    placeholder="example@abc.com"
+                  />
+                </div>
+                <div className="col s12">
+                  <label>
+                    Indication of blood transfution (For which reason blood
+                    needed):
+                  </label>
+                  <input
+                    id="reciever-reason"
+                    type="text"
+                    name="donor_name"
+                    placeholder="e.g: Thalassemia, Caesarean etc"
+                  />
+                </div>
+                <div className="col s12">
+                  <label>
+                    Where Blood Is Needed / In Which Hospital Patient Is
+                    Admitted:
+                  </label>
+                  <input
+                    id="reciever-place-name"
+                    type="text"
+                    name="reciever-needed-place"
+                    placeholder="e.g: Labaid, Apollo etc"
+                  />
+                </div>
+                <div className="col s12">
+                  <label>Lab Reference No:</label>
+                  <input
+                    id="reciever-lab-ref-no"
+                    type="text"
+                    name="reciever-lab-ref-no"
+                  />
+                </div>
+                <div className="col s12">
+                  <label>Bag No:</label>
+                  <input
+                    id="reciever-bag-no"
+                    type="text"
+                    name="reciever-bag-no"
+                  />
+                </div>
+                <input
+                  type="hidden"
+                  id="donerId"
+                  name="dontId"
+                  value={this.state.donor_id}
+                ></input>
+                <div className="col s12">
+                  <button
+                    type="submit"
+                    className="btn waves-effect waves-light modal-close"
+                    onClick={() => {
+                      this.handleRecieverForm();
+                    }}
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="addNewDonarModal" className="modal">

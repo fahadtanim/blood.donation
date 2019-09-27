@@ -5,11 +5,38 @@
 .add-new-donor-btn {
   margin-top: 28px;
 }
+a,
+a:hover,
+a:focus,
+a:active {
+  cursor: pointer;
+  outline: none !important;
+}
 
+#donor-list-table tr {
+  cursor: pointer;
+}
+.dropdown-trigger :focus,
+.dropdown-trigger :hover,
+.dropdown-trigger :active {
+  outline: none;
+}
 #right-btn-container {
   max-width: 350px;
   min-width: 250px;
   position: absolute;
   z-index: 1000;
   display: none;
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+#right-btn-container > ul,
+#right-btn-container > ul > li,
+#right-btn-container > ul > li > a {
+  width: 100%;
+}
+
+#right-btn-container a {
+  cursor: pointer;
 }
