@@ -413,7 +413,7 @@ class DonorTable extends Component {
               </button>
             </div>
             <div className="col s6">
-              <div className="row">
+              <div className="row no-bottom-margin">
                 <div className="col s6">
                   <label htmlFor="blood-group">Blood Group:</label>
                   <select
@@ -435,13 +435,23 @@ class DonorTable extends Component {
                 </div>
               </div>
               <div className="row">
-                <button
-                  className="wave-effect wave-teal btn col"
-                  onClick={this.handleSearchByBloodGroup}
-                >
-                  Filter
-                </button>
+                <div className="col s12">
+                  <button
+                    className="wave-effect wave-teal btn"
+                    onClick={this.handleSearchByBloodGroup}
+                  >
+                    Filter
+                  </button>
+                </div>
               </div>
+            </div>
+            <div className="col s3">
+              <button
+                className="waves-effect waves-light btn modal-trigger add-new-donor-btn"
+                data-target="addNewDonarModal"
+              >
+                Add New Donor
+              </button>
             </div>
           </div>
           <div className="row">
