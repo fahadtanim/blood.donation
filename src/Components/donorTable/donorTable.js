@@ -60,6 +60,7 @@ class DonorTable extends Component {
           elem.style.display = "none";
         }
       });
+      instances.forEach(data => data.close());
       elems = document.querySelectorAll("select");
       instances = M.FormSelect.init(elems, {});
     });
@@ -102,7 +103,10 @@ class DonorTable extends Component {
         elem.style.display = "none";
       }
     });
-
+    elems = document.querySelectorAll(".modal");
+    // console.log(elems);
+    instances = M.Modal.init(elems, {});
+    instances.forEach(data => data.close());
     elems = document.querySelectorAll(".dropdown-trigger");
     instances = M.Dropdown.init(elems, {
       closeOnClick: true,

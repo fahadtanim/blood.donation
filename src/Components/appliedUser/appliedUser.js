@@ -6,6 +6,7 @@ import ls from "local-storage";
 import { NavLink } from "react-router-dom";
 import { config } from "../../services/config";
 import "./appliedUser.css";
+import Header from "../header/header";
 
 class AppliedUser extends Component {
   state = {};
@@ -47,6 +48,9 @@ class AppliedUser extends Component {
         autoTrigger: true
       });
     });
+    elems = document.querySelectorAll(".modal");
+    // console.log(elems);
+    instances = M.Modal.init(elems, {});
   };
 
   componentDidUpdate = () => {
@@ -58,6 +62,10 @@ class AppliedUser extends Component {
     });
     elems = document.querySelectorAll(".sidenav");
     instances = M.Sidenav.init(elems, {});
+    elems = document.querySelectorAll(".modal");
+    // console.log(elems);
+    instances = M.Modal.init(elems, {});
+    instances.forEach(data => data.close());
   };
 
   handleApprove = user_id => {
@@ -145,6 +153,82 @@ class AppliedUser extends Component {
   handleLogOut = () => {
     ls.set("user", null);
     window.location.href = "/";
+  };
+
+  handleAddBloodGroup = () => {
+    let bloodGroup = {
+      blood_group: document.getElementById("new-blood-group-name").value
+    };
+    axios
+      .post(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/group/add",
+        bloodGroup
+      )
+      .then(result => {
+        if (result.data.status === "OK") {
+          M.toast({ html: "Blood Group Add" });
+          axios
+            .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/group/all")
+            .then(result => {
+              // console.log(result);
+              this.setState({ blood_group: result.data });
+            });
+        } else {
+          M.toast({ html: "Couldn't Add Blood Group" });
+        }
+      });
+  };
+  handleAddBloodElement = () => {
+    let bloodElement = {
+      element_name: document.getElementById("new-blood-element-name").value
+    };
+    axios
+      .post(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/element/add",
+        bloodElement
+      )
+      .then(result => {
+        if (result.data.status === "OK") {
+          M.toast({ html: "Blood Element Added" });
+          axios
+            .get(
+              config.apiUrl + "/bloodbank/api/bloodBank/v1/blood/element/all"
+            )
+            .then(result => {
+              // console.log("blood element");
+              // console.log(result);
+              this.setState({ blood_elements: result.data });
+            });
+        } else {
+          M.toast({ html: "Couldn't Add Blood Element" });
+        }
+      });
+  };
+  handleAddCommunity = () => {
+    let community = {
+      community_name: document.getElementById("new-community-group-name").value
+    };
+    console.log("community :");
+    console.log(community);
+    axios
+      .post(
+        config.apiUrl + "/bloodbank/api/bloodBank/v1/community/add",
+        community
+      )
+      .then(result => {
+        if (result.data.status === "OK") {
+          M.toast({ html: "Community Group Added" });
+          axios
+            .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/community/all")
+            .then(result => {
+              console.log("community group : ");
+              console.log(result);
+              this.setState({ community_group: result.data });
+            });
+        } else {
+          M.toast({ html: "Couldn't Add Community Group" });
+        }
+      });
   };
 
   handleNav = param => {
@@ -260,7 +344,6 @@ class AppliedUser extends Component {
               <ul id="dropdown1" className="dropdown-content">
                 <li>
                   <a
-                    href="#addNewBloodGroup"
                     className="modal-trigger"
                     data-target="addNewBloodGroupModal"
                   >
@@ -269,7 +352,6 @@ class AppliedUser extends Component {
                 </li>
                 <li>
                   <a
-                    href="#addNewBloodElement"
                     className="modal-trigger"
                     data-target="addNewBloodElementModal"
                   >
@@ -278,7 +360,6 @@ class AppliedUser extends Component {
                 </li>
                 <li>
                   <a
-                    href="#addNewCommunity"
                     className="modal-trigger"
                     data-target="addNewCommunityModal"
                   >
@@ -364,10 +445,12 @@ class AppliedUser extends Component {
       );
     }
   };
+
   render() {
     return (
       <React.Fragment>
         <div className="row header-bar">{this.handleNav(this.state)}</div>
+        {/* <Header></Header> */}
         <div className="row">
           <div id="test"></div>
           <div className="container">
