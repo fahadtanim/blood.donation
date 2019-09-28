@@ -267,7 +267,7 @@ class Home extends Component {
             </div>
           </div>
         </div>
-        <div className="container">
+        <div className="container pad-bottom-container">
           <div className="row">
             <div className="col s12 m12 l12">
               <div className="col s3"></div>
