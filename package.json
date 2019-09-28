@@ -22,7 +22,8 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "surgedeploy": "react-scripts build && cp build/index.html build/200.html"
+    "surgebuild": "react-scripts build && cd build && ren index.html 200.html",
+    "surgedeploy": "surge"
   },
   "eslintConfig": {
     "extends": "react-app"

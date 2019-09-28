@@ -21,3 +21,17 @@ footer .row {
   clip-path: polygon(10% 0%, 100% 0%, 100% 100%, 0% 100%);
   margin-top: 30px;
 }
+
+.shondhani-logo {
+  width: 6%;
+  margin-right: 27%;
+}
+
+.dbc-logo {
+  width: 30%;
+  margin-right: 24%;
+}
+
+.exhort-logo {
+  width: 10%;
+}

@@ -12,17 +12,17 @@ export default class Footer extends Component {
                   <div className="row">
                     <img
                       src="../../Assets/images/shondhani-logo.svg"
-                      className="col s3 m1"
+                      className="col shondhani-logo"
                     />
-                    <div className="col m4"></div>
+                    <div className="col"></div>
                     <img
                       src="../../Assets/images/dbc-logo.svg"
-                      className="col s6 m2"
+                      className="col dbc-logo"
                     />
-                    <div className="col m3"></div>
+                    <div className="col"></div>
                     <img
                       src="../../Assets/images/exhort-logo.svg"
-                      className="col s3 m2"
+                      className="col exhort-logo"
                     />
                   </div>
                 </div>
