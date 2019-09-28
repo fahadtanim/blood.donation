@@ -480,7 +480,8 @@ class DonorTable extends Component {
       donor_last_address: param.last_address,
       donor_email: param.email,
       donor_mobile_number: param.mobile_number,
-      donor_blood_group: param.blood_group
+      donor_blood_group: param.blood_group,
+      donor_prev_donation_count: param.number_of_previous_donation
     });
     elem.style.top = this.mouseY(event) + "px";
     elem.style.left = this.mouseX(event) + "px";
@@ -596,23 +597,23 @@ class DonorTable extends Component {
     };
     console.log("from form");
     console.log(donor);
-    let test = {
-      doner_name: "first",
-      first_address: "first",
-      middle_address: "middle",
-      last_address: "last",
-      mobile_number: "01687997516",
-      email: "test@gmail.com",
-      comunity_group: "du",
-      blood_group: "A+",
-      previous_donation: false,
-      number_of_previous_donation: "2",
-      donation_date: "18-09-2019",
-      dob: "18-09-2019",
-      screening_result: "Accepted",
-      screening_value: "",
-      user_id: 1
-    };
+    // let test = {
+    //   doner_name: "first",
+    //   first_address: "first",
+    //   middle_address: "middle",
+    //   last_address: "last",
+    //   mobile_number: "01687997516",
+    //   email: "test@gmail.com",
+    //   comunity_group: "du",
+    //   blood_group: "A+",
+    //   previous_donation: false,
+    //   number_of_previous_donation: "2",
+    //   donation_date: "18-09-2019",
+    //   dob: "18-09-2019",
+    //   screening_result: "Accepted",
+    //   screening_value: "",
+    //   user_id: 1
+    // };
     // console.log(test);
     axios
       .post(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/add", donor)
@@ -838,7 +839,47 @@ class DonorTable extends Component {
   };
 
   handleFreezerForm = () => {
-    // let freezer =
+    let screening_state = "";
+    if (document.getElementById("freezer-screening-accepted").checked) {
+      screening_state = "1";
+    }
+    if (document.getElementById("freezer-screening-rejected").checked) {
+      screening_state = "2";
+    }
+    let freezer = {
+      donationDate: document.getElementById("freezer-donation-date").value,
+      bloodGroup: document.getElementById("freezer-donor-blood-group").value,
+      bloodElement: document.getElementById("freezer-donor-blood-element")
+        .value,
+      expDate: document.getElementById("freezer-expire-date").value,
+      numberOfBag: document.getElementById("freezer-bag-no").value,
+      labRef: document.getElementById("freezer-lab-ref-no").value,
+      donerName: document.getElementById("freezer-donor-name").value,
+      donerEmail: document.getElementById("freezer-donor-email").value,
+      donerMobile: document.getElementById("freezer-donor-mobile-number").value,
+      bloodpressureLeft: document.getElementById(
+        "freezer-donor-blood-pressure-upper"
+      ).value,
+      bloodpressureRight: document.getElementById(
+        "freezer-donor-blood-pressure-lower"
+      ).value,
+      weight: document.getElementById("freezer-donor-weight").value,
+      numberOfDonation: this.state.donor_prev_donation_count + 1,
+      screeningValue: screening_state,
+      userId: this.state.user_id,
+      donerId: this.state.donor_id
+    };
+    console.log("freezer");
+    console.log(freezer);
+
+    axios
+      .post(config.apiUrl + "/bloodbank/api/bloodBank/v1/freezer/add", freezer)
+      .then(result => {
+        if (result.data.status === "OK") {
+          M.toast({ html: "Added to Freezer" });
+        } else {
+        }
+      });
   };
 
   handleTodayDate = () => {
@@ -1163,7 +1204,7 @@ class DonorTable extends Component {
                   <label htmlFor="freezer-bg">Blood Group:</label>
                   <input /* document.getElementById("freezer-blood_group").value*/
                     disabled
-                    id="freezer-blood-group"
+                    id="freezer-donor-blood-group"
                     type="text"
                     name="freezer-bg"
                     value={this.state.donor_blood_group}
@@ -1174,7 +1215,7 @@ class DonorTable extends Component {
                   <label htmlFor="blood-element">Blood Products:</label>
                   <select
                     name="blood-element"
-                    id="freezer-blood-element"
+                    id="freezer-donor-blood-element"
                     defaultValue="0"
                   >
                     <option value="0" disabled>
@@ -1184,19 +1225,29 @@ class DonorTable extends Component {
                   </select>
                 </div>
                 <div className="col s12">
+                  <label htmlFor="date">Expire Date:</label>
+
+                  <input
+                    id="freezer-expire-date" /* document.getElementById("freezer-donation-date").value*/
+                    type="date"
+                    name="freezer-expire-date"
+                    className="datepicker"
+                  />
+                </div>
+                <div className="col s12">
                   <label>Bag Number:</label>
                   <input
-                    id="reciever-bag-no"
+                    id="freezer-bag-no"
                     type="text"
-                    name="reciever-bag-no"
+                    name="freezer-bag-no"
                   />
                 </div>
                 <div className="col s12">
                   <label>Lab Reference Number:</label>
                   <input
-                    id="reciever-lab-ref-no"
+                    id="freezer-lab-ref-no"
                     type="text"
-                    name="reciever-lab-ref-no"
+                    name="freezer-lab-ref-no"
                   />
                 </div>
                 <div className="col s12">
@@ -1316,7 +1367,7 @@ class DonorTable extends Component {
                 <div className="col s12 m12">
                   <label>Number of Donation Including This Donation</label>
                   <input
-                    id="freezer-donor-donation-number"
+                    id="freezer-donor-donation-count"
                     type="number"
                     name="middle_address"
                     placeholder="ex.  3"
@@ -1342,7 +1393,7 @@ class DonorTable extends Component {
                   <p>
                     <label>
                       <input
-                        id="freezing-screening-rejected"
+                        id="freezer-screening-rejected"
                         type="radio"
                         name="freezing-screening"
                       />
