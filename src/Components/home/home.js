@@ -270,15 +270,8 @@ class Home extends Component {
         <div className="container">
           <div className="row">
             <div className="col s12 m12 l12">
-              <div className="card white darken-0">
-                <div className="card-content z-depth-0 red-text">
-                  <span className="card-title center">
-                    BLOOD DONATION REDUCES RISK OF CANCER, HYPERTENSION AND
-                    HEART DISEASE
-                  </span>
-                </div>
-              </div>
-
+              <div className="col s3"></div>
+              <img src="./Assets/images/home-boyan.svg" className="col s6" />
               <form className="col s12" action="">
                 <div className="input-field row">
                   <span className="col s12 teal-text center-align">

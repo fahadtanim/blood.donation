@@ -84,6 +84,10 @@ class DonorTable extends Component {
         document.getElementById("right-btn-container").style.display = "none";
       }
     });
+    // let elems = document.querySelectorAll(".datepicker");
+    // let instances = M.Datepicker.init(elems, {});
+    // let elem = document.getElementById("freezer-donation-date");
+    // let dateInstance = M.Datepicker.getInstance(elem);
   }
 
   componentDidUpdate = () => {
@@ -447,10 +451,17 @@ class DonorTable extends Component {
 
   handleRightButtonClick = (event, param) => {
     event.preventDefault();
-    // console.log(param);
+    console.log(param);
     let elem = document.getElementById("right-btn-container");
     this.setState({
+      // donor: param,
       donor_id: param.doner_id,
+      donor_name: param.doner_name,
+      donor_first_address: param.first_address,
+      donor_middle_address: param.middle_address,
+      donor_last_address: param.last_address,
+      donor_email: param.email,
+      donor_mobile_number: param.mobile_number,
       donor_blood_group: param.blood_group
     });
     elem.style.top = this.mouseY(event) + "px";
@@ -796,6 +807,23 @@ class DonorTable extends Component {
       });
   };
 
+  handleTodayDate = () => {
+    if (document.getElementById("freezer-donated-today").checked) {
+      let date = new Date();
+      document.getElementById("freezer-donation-date").value =
+        date.getFullYear().toString() +
+        "-" +
+        (date.getMonth() + 1).toString().padStart(2, 0) +
+        "-" +
+        date
+          .getDate()
+          .toString()
+          .padStart(2, 0);
+    } else {
+      document.getElementById("freezer-donation-date").value = "";
+    }
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -820,7 +848,8 @@ class DonorTable extends Component {
                 Filter
               </button>
             </div>
-            <div className="col s6">
+            <div className="col s6 m6"></div>
+            {/* <div className="col s6">
               <div className="row no-bottom-margin">
                 <div className="col s6">
                   <label htmlFor="blood-group">Blood Group:</label>
@@ -852,7 +881,7 @@ class DonorTable extends Component {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="col s3">
               <button
                 className="waves-effect waves-light btn modal-trigger add-new-donor-btn"
@@ -1073,6 +1102,27 @@ class DonorTable extends Component {
             <div className="container">
               <div className="row">
                 <h5 className="subheader col s12">Add to Freezer</h5>
+                <p className="col s12">
+                  <label>
+                    <input
+                      id="freezer-donated-today"
+                      type="checkbox"
+                      name="freezing-donated-today"
+                      onClick={this.handleTodayDate}
+                    />
+                    <span>Tick If You Have Donated Today</span>
+                  </label>
+                </p>
+                <div className="col s12">
+                  <label htmlFor="date">Donation Date:</label>
+
+                  <input
+                    id="freezer-donation-date"
+                    type="date"
+                    name="freezer-donation-date"
+                    className="datepicker"
+                  />
+                </div>
                 <div className="col s12">
                   <label htmlFor="freezer-bg">Blood Group:</label>
                   <input
@@ -1081,6 +1131,7 @@ class DonorTable extends Component {
                     type="text"
                     name="freezer-bg"
                     value={this.state.donor_blood_group}
+                    disabled
                   />
                 </div>
                 <div className="col s12">
@@ -1118,6 +1169,8 @@ class DonorTable extends Component {
                     id="freezer-donor-name"
                     type="text"
                     name="donor_name"
+                    value={this.state.donor_name}
+                    disabled
                   />
                 </div>
                 <div className="col s12">
@@ -1129,6 +1182,8 @@ class DonorTable extends Component {
                         type="text"
                         name="first_address"
                         placeholder="first address"
+                        value={this.state.donor_first_address}
+                        disabled
                       />
                     </div>
                     <div className="col s12 m4">
@@ -1137,6 +1192,8 @@ class DonorTable extends Component {
                         type="text"
                         name="middle_address"
                         placeholder="middle address"
+                        value={this.state.donor_middle_address}
+                        disabled
                       />
                     </div>
                     <div className="col s12 m4">
@@ -1145,6 +1202,8 @@ class DonorTable extends Component {
                         type="text"
                         name="last_address"
                         placeholder="last address"
+                        value={this.state.donor_last_address}
+                        disabled
                       />
                     </div>
                   </div>
@@ -1156,6 +1215,8 @@ class DonorTable extends Component {
                     type="email"
                     name="email"
                     placeholder="example@abc.com"
+                    value={this.state.donor_email}
+                    disabled
                   />
                 </div>
                 <div className="col s12">
@@ -1165,6 +1226,8 @@ class DonorTable extends Component {
                     name="mobile-number"
                     id="freezer-donor-mobile-number"
                     placeholder="ex : +8801533556677"
+                    value={this.state.donor_mobile_number}
+                    disabled
                   />
                 </div>
                 <h6 className="subheader-optional col s12">Optional</h6>
@@ -1230,9 +1293,9 @@ class DonorTable extends Component {
                   <p>
                     <label>
                       <input
-                        type="checkbox"
-                        value="Accepted"
-                        className="filled-in rejected-for-chk"
+                        id="freezer-screening-accepted"
+                        type="radio"
+                        name="freezing-screening"
                       />
                       <span>Screening Done or Accepted</span>
                     </label>
@@ -1243,9 +1306,9 @@ class DonorTable extends Component {
                   <p>
                     <label>
                       <input
-                        type="checkbox"
-                        value="Rejected"
-                        className="filled-in rejected-for-chk"
+                        id="freezing-screening-rejected"
+                        type="radio"
+                        name="freezing-screening"
                       />
                       <span>Screening Done or Rejected</span>
                     </label>
