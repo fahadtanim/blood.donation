@@ -1,7 +1,11 @@
 .no-bottom-margin {
   margin-bottom: 0px;
 }
-
+.subheader-optional {
+  background: #f5f5f5;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
 .add-new-donor-btn {
   margin-top: 28px;
 }

@@ -80,7 +80,9 @@ class DonorTable extends Component {
         this.setState({ blood_elements: result.data });
       });
     document.addEventListener("click", () => {
-      document.getElementById("right-btn-container").style.display = "none";
+      if (document.getElementById("right-btn-container") !== null) {
+        document.getElementById("right-btn-container").style.display = "none";
+      }
     });
   }
 
@@ -436,7 +438,7 @@ class DonorTable extends Component {
           {/* <td>{data.comunity_group}</td> */}
           <td>{data.previous_donation ? "Yes" : "No"}</td>
           <td>{data.number_of_previous_donation}</td>
-          <td>{data.donation_data ? data.donation_data : "----------"}</td>
+          <td>{data.donation_date ? data.donation_date : "----------"}</td>
         </tr>
       );
     });
@@ -889,13 +891,17 @@ class DonorTable extends Component {
           >
             Donate to Patient
           </a>
-          <a href="#!" className="collection-item">
+          <a
+            className="collection-item modal-trigger"
+            data-target="addToFreezerModal"
+          >
             Add to Freezer
           </a>
           <a href="#!" className="collection-item">
             Screening
           </a>
         </div>
+        {/* ##### DONATE TO PATIENT MODAL ##### */}
 
         <div id="donateToPatientModal" className="modal">
           <div className="modal-content">
@@ -1061,7 +1067,213 @@ class DonorTable extends Component {
             </div>
           </div>
         </div>
+        {/* ##### ADD TO FREEZER MODAL ##### */}
+        <div id="addToFreezerModal" className="modal">
+          <div className="modal-content">
+            <div className="container">
+              <div className="row">
+                <h5 className="subheader col s12">Add to Freezer</h5>
+                <div className="col s12">
+                  <label htmlFor="freezer-bg">Blood Group:</label>
+                  <input
+                    disabled
+                    id="freezer-blood-group"
+                    type="text"
+                    name="freezer-bg"
+                    value={this.state.donor_blood_group}
+                  />
+                </div>
+                <div className="col s12">
+                  <label htmlFor="blood-group">Blood Products:</label>
+                  <select
+                    name="blood-group"
+                    id="freezer-blood-element"
+                    defaultValue="0"
+                  >
+                    <option value="0" disabled>
+                      ex : Whole Blood
+                    </option>
+                    {this.handleBloodElementOption(this.state.blood_elements)}
+                  </select>
+                </div>
+                <div className="col s12">
+                  <label>Bag Number:</label>
+                  <input
+                    id="reciever-bag-no"
+                    type="text"
+                    name="reciever-bag-no"
+                  />
+                </div>
+                <div className="col s12">
+                  <label>Lab Reference Number:</label>
+                  <input
+                    id="reciever-lab-ref-no"
+                    type="text"
+                    name="reciever-lab-ref-no"
+                  />
+                </div>
+                <div className="col s12">
+                  <label>Donor's Name:</label>
+                  <input
+                    id="freezer-donor-name"
+                    type="text"
+                    name="donor_name"
+                  />
+                </div>
+                <div className="col s12">
+                  <label>Donor's Address:</label>
+                  <div className="row">
+                    <div className="col s12 m4">
+                      <input
+                        id="new-donor-first-address"
+                        type="text"
+                        name="first_address"
+                        placeholder="first address"
+                      />
+                    </div>
+                    <div className="col s12 m4">
+                      <input
+                        id="new-donor-middle-address"
+                        type="text"
+                        name="middle_address"
+                        placeholder="middle address"
+                      />
+                    </div>
+                    <div className="col s12 m4">
+                      <input
+                        id="new-donor-last-address"
+                        type="text"
+                        name="last_address"
+                        placeholder="last address"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col s12">
+                  <label htmlFor="">Donor's E-mail:</label>
+                  <input
+                    id="freezer-donor-email"
+                    type="email"
+                    name="email"
+                    placeholder="example@abc.com"
+                  />
+                </div>
+                <div className="col s12">
+                  <label htmlFor="mobile-number">Donor's Mobile Number:</label>
+                  <input
+                    type="text"
+                    name="mobile-number"
+                    id="freezer-donor-mobile-number"
+                    placeholder="ex : +8801533556677"
+                  />
+                </div>
+                <h6 className="subheader-optional col s12">Optional</h6>
+                <div className="col s12 m6">
+                  <label>Donor's Blood Pressure:</label>
+                  <div className="row">
+                    <div className="col s5 m5">
+                      <input
+                        id="freezer-donor-blood-pressure-upper"
+                        type="number"
+                        name="first_address"
+                        placeholder="upper"
+                      />
+                    </div>
+                    <div
+                      className="col"
+                      style={{ fontSize: "24px", marginTop: "10px" }}
+                    >
+                      /
+                    </div>
+                    <div className="col s5 m5">
+                      <input
+                        id="freezer-donor-blood-pressure-lower"
+                        type="number"
+                        name="middle_address"
+                        placeholder="lower"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="col s12 m6">
+                  <label>Donor's Weight:</label>
+                  <div className="row">
+                    <div className="col s9 m6">
+                      <input
+                        id="freezer-donor-weight"
+                        type="number"
+                        name="first_address"
+                        placeholder="ex. 150Kg"
+                      />
+                    </div>
+                    <div
+                      className="col"
+                      style={{ fontSize: "20px", marginTop: "14px" }}
+                    >
+                      Kg
+                    </div>
+                  </div>
+                </div>
+                <div className="col s12 m12">
+                  <label>Number of Donation Including This Donation</label>
+                  <input
+                    id="freezer-donor-donation-number"
+                    type="number"
+                    name="middle_address"
+                    placeholder="ex.  3"
+                  />
+                </div>
+                <div className="col s12">
+                  <label htmlFor="">
+                    Tick If ( No Need if screening is done before donation)
+                  </label>
+                  <p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="Accepted"
+                        className="filled-in rejected-for-chk"
+                      />
+                      <span>Screening Done or Accepted</span>
+                    </label>
+                  </p>
+                  <p>
+                    <label>Or</label>
+                  </p>
+                  <p>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value="Rejected"
+                        className="filled-in rejected-for-chk"
+                      />
+                      <span>Screening Done or Rejected</span>
+                    </label>
+                  </p>
+                </div>
+                <input
+                  type="hidden"
+                  id="donerId"
+                  name="dontId"
+                  value={this.state.donor_id}
+                ></input>
+                <div className="col s12">
+                  <button
+                    type="submit"
+                    className="btn waves-effect waves-light modal-close"
+                    onClick={() => {
+                      this.handleRecieverForm();
+                    }}
+                  >
+                    Add to Freezer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        {/* ###### ADD NEW DONOR ####### */}
         <div id="addNewDonarModal" className="modal">
           <div className="modal-content">
             <div className="container">

@@ -117,11 +117,7 @@ class DonorList extends Component {
                 </li>
 
                 <li>
-                  <a
-                    className="dropdown-trigger"
-                    href="#!"
-                    data-target="dropdown1"
-                  >
+                  <a className="dropdown-trigger" data-target="dropdown1">
                     Other
                     <i className="material-icons right">arrow_drop_down</i>
                   </a>
@@ -135,12 +131,105 @@ class DonorList extends Component {
                   </button>
                 </li>
               </ul>
+              <div id="addNewBloodGroupModal" className="modal">
+                <div className="modal-content">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col s12">
+                        <label>Name of Blood Group:</label>
+                        <input
+                          id="new-blood-group-name"
+                          type="text"
+                          name="blood_group"
+                        />
+                      </div>
+                      <div className="col s12">
+                        <button
+                          className="btn waves-effect waves-light modal-close"
+                          onClick={this.handleAddBloodGroup}
+                        >
+                          Add Blood Group
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="addNewBloodElementModal" className="modal">
+                <div className="modal-content">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col s12">
+                        <label>Name of Blood Element:</label>
+                        <input
+                          id="new-blood-element-name"
+                          type="text"
+                          name="blood_element"
+                        />
+                      </div>
+                      <div className="col s12">
+                        <button
+                          className="btn waves-effect waves-light modal-close"
+                          onClick={this.handleAddBloodElement}
+                        >
+                          Add Blood Element
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="addNewCommunityModal" className="modal">
+                <div className="modal-content">
+                  <div className="container">
+                    <div className="row">
+                      <div className="col s12">
+                        <label>Name of Blood Community:</label>
+                        <input
+                          id="new-community-group-name"
+                          type="text"
+                          name="community_group"
+                        />
+                      </div>
+                      <div className="col s12">
+                        <button
+                          className="btn waves-effect waves-light modal-close"
+                          onClick={this.handleAddCommunity}
+                        >
+                          Add Community
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <ul id="dropdown1" className="dropdown-content">
                 <li>
-                  <a href="#!">Add Blood Group</a>
+                  <a
+                    href="#addNewBloodGroup"
+                    className="modal-trigger"
+                    data-target="addNewBloodGroupModal"
+                  >
+                    Add Blood Group
+                  </a>
                 </li>
                 <li>
-                  <a href="#!">Add Blood Elements</a>
+                  <a
+                    href="#addNewBloodElement"
+                    className="modal-trigger"
+                    data-target="addNewBloodElementModal"
+                  >
+                    Add Blood Elements
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#addNewCommunity"
+                    className="modal-trigger"
+                    data-target="addNewCommunityModal"
+                  >
+                    Add Community Group
+                  </a>
                 </li>
               </ul>
               <ul className="sidenav" id="mobile-demo">
@@ -221,7 +310,6 @@ class DonorList extends Component {
       );
     }
   };
-
   componentWillUnmount() {
     console.log("donorlist component unmounted");
   }
