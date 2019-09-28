@@ -770,10 +770,11 @@ class DonorTable extends Component {
           : document.getElementById("reciever-relative-relation").value,
       email: document.getElementById("reciever-email").value,
       bloodReason: document.getElementById("reciever-reason").value,
-      hospital: document.getElementById("reciever-place-name"),
-      labRef: document.getElementById("reciever-lab-ref-no"),
-      numberOdBag: document.getElementById("reciever-bag-no"),
-      userId: decode.id
+      hospital: document.getElementById("reciever-place-name").value,
+      labRef: document.getElementById("reciever-lab-ref-no").value,
+      numberOdBag: document.getElementById("reciever-bag-no").value,
+      userId: decode.id,
+      donerId: document.getElementById("donerId").value
     };
 
     console.log("from reciever form :");
@@ -787,6 +788,8 @@ class DonorTable extends Component {
         console.log(result);
         if (result.data.status === "OK") {
           M.toast({ html: "Reciever Added Succesfully" });
+        } else {
+          M.toast({ html: "Couldn't Add Reciever" });
         }
       });
   };
