@@ -1,6 +1,9 @@
 footer {
   margin-top: 60px;
   margin-bottom: 0px !important;
+  bottom: 0px;
+  width: 100%;
+  position: absolute;
 }
 footer .row {
   margin-bottom: 0px;

@@ -828,7 +828,7 @@ class DonorTable extends Component {
     return (
       <React.Fragment>
         <div className="row header-bar">{this.handleNav(this.state)}</div>
-        <div className="container">
+        <div className="container pad-bottom-container">
           <div className="row">
             {/* {this.handleBloodGroupList(this.state.blood_group)} */}
             <div className="col s3">

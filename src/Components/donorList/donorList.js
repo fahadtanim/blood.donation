@@ -317,7 +317,7 @@ class DonorList extends Component {
     return (
       <React.Fragment>
         <div className="row header-bar">{this.handleNav(this.state)}</div>
-        <div className="container">
+        <div className="container pad-bottom-container">
           <div className="row">
             <div className="menu-container">
               <button className="waves-effect waves-light btn">Leader</button>

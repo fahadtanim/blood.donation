@@ -12,7 +12,16 @@ code {
     monospace;
 }
 
-.header-bar{
+.header-bar {
   height: 60px;
   background-color: rgb(38, 166, 154);
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+}
+
+.pad-bottom-container {
+  padding-bottom: 150px;
 }
