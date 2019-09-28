@@ -25,6 +25,16 @@ class DonorTable extends Component {
       window.location.href = "/";
     }
     let dc = jwt_decode(tk);
+    console.log(dc);
+    this.setState({ user_id: dc.id }, () => {
+      axios
+        .get(
+          config.apiUrl +
+            "/bloodbank/api/bloodBank/v1/doner/all/doners/" +
+            this.state.user_id
+        )
+        .then(result => this.setState({ data: result.data }));
+    });
     // console.log(dc);
     if (dc.role[0].roleName == "SUPER_ADMIN") {
       this.setState({ role: "SA" });
@@ -64,9 +74,6 @@ class DonorTable extends Component {
       elems = document.querySelectorAll("select");
       instances = M.FormSelect.init(elems, {});
     });
-    axios
-      .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
-      .then(result => this.setState({ data: result.data }));
 
     // document
     //   .getElementById("addNewBloodGroupForm")
@@ -116,6 +123,13 @@ class DonorTable extends Component {
 
     elems = document.querySelectorAll("select");
     instances = M.FormSelect.init(elems, {});
+    // axios
+    //   .get(
+    //     config.apiUrl +
+    //       "/bloodbank/api/bloodBank/v1/doner/all/doners/" +
+    //       this.state.user_id
+    //   )
+    //   .then(result => this.setState({ data: result.data }));
   };
 
   handleLogOut = () => {
@@ -487,12 +501,20 @@ class DonorTable extends Component {
     }
     if (value == 0) {
       axios
-        .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
+        .get(
+          config.apiUrl +
+            "/bloodbank/api/bloodBank/v1/doner/all/doners/" +
+            this.state.user_id
+        )
         .then(result => this.setState({ data: result.data }));
     } else {
       axios
         .get(
-          config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/by/group/" + value
+          config.apiUrl +
+            "/bloodbank/api/bloodBank/v1/doner/by/group/" +
+            this.state.user_id +
+            "/" +
+            value
         )
         .then(result => this.setState({ data: result.data }));
     }
@@ -574,23 +596,23 @@ class DonorTable extends Component {
     };
     console.log("from form");
     console.log(donor);
-    // let test = {
-    //   doner_name: "first",
-    //   first_address: "first",
-    //   middle_address: "middle",
-    //   last_address: "last",
-    //   mobile_number: "016845647997516",
-    //   email: "testasdas@gmail.com",
-    //   comunity_group: "du",
-    //   blood_group: "B+ve",
-    //   previous_donation: false,
-    //   number_of_previous_donation: "2",
-    //   donation_date: "2019-09-18",
-    //   dob: "2019-09-18",
-    //   screening_result: "Rejected",
-    //   screening_value: "A,b,C",
-    //   user_id: 1
-    // };
+    let test = {
+      doner_name: "first",
+      first_address: "first",
+      middle_address: "middle",
+      last_address: "last",
+      mobile_number: "01687997516",
+      email: "test@gmail.com",
+      comunity_group: "du",
+      blood_group: "A+",
+      previous_donation: false,
+      number_of_previous_donation: "2",
+      donation_date: "18-09-2019",
+      dob: "18-09-2019",
+      screening_result: "Accepted",
+      screening_value: "",
+      user_id: 1
+    };
     // console.log(test);
     axios
       .post(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/add", donor)
@@ -598,7 +620,11 @@ class DonorTable extends Component {
         if (result.data.status == "OK") {
           M.toast({ html: "Donor Added Successfully" });
           axios
-            .get(config.apiUrl + "/bloodbank/api/bloodBank/v1/doner/all/doners")
+            .get(
+              config.apiUrl +
+                "/bloodbank/api/bloodBank/v1/doner/all/doners/" +
+                this.state.user_id
+            )
             .then(result => this.setState({ data: result.data }));
         }
       });
@@ -811,6 +837,10 @@ class DonorTable extends Component {
       });
   };
 
+  handleFreezerForm = () => {
+    // let freezer =
+  };
+
   handleTodayDate = () => {
     if (document.getElementById("freezer-donated-today").checked) {
       let date = new Date();
@@ -823,8 +853,10 @@ class DonorTable extends Component {
           .getDate()
           .toString()
           .padStart(2, 0);
+      document.getElementById("freezer-donation-date").disabled = true;
     } else {
       document.getElementById("freezer-donation-date").value = "";
+      document.getElementById("freezer-donation-date").disabled = false;
     }
   };
 
@@ -1109,7 +1141,7 @@ class DonorTable extends Component {
                 <p className="col s12">
                   <label>
                     <input
-                      id="freezer-donated-today"
+                      id="freezer-donated-today" /* document.getElementById("freezer-donated-today").value*/
                       type="checkbox"
                       name="freezing-donated-today"
                       onClick={this.handleTodayDate}
@@ -1121,7 +1153,7 @@ class DonorTable extends Component {
                   <label htmlFor="date">Donation Date:</label>
 
                   <input
-                    id="freezer-donation-date"
+                    id="freezer-donation-date" /* document.getElementById("freezer-donation-date").value*/
                     type="date"
                     name="freezer-donation-date"
                     className="datepicker"
@@ -1129,7 +1161,7 @@ class DonorTable extends Component {
                 </div>
                 <div className="col s12">
                   <label htmlFor="freezer-bg">Blood Group:</label>
-                  <input
+                  <input /* document.getElementById("freezer-blood_group").value*/
                     disabled
                     id="freezer-blood-group"
                     type="text"
@@ -1139,9 +1171,9 @@ class DonorTable extends Component {
                   />
                 </div>
                 <div className="col s12">
-                  <label htmlFor="blood-group">Blood Products:</label>
+                  <label htmlFor="blood-element">Blood Products:</label>
                   <select
-                    name="blood-group"
+                    name="blood-element"
                     id="freezer-blood-element"
                     defaultValue="0"
                   >
@@ -1182,7 +1214,7 @@ class DonorTable extends Component {
                   <div className="row">
                     <div className="col s12 m4">
                       <input
-                        id="new-donor-first-address"
+                        id="freezer-donor-first-address"
                         type="text"
                         name="first_address"
                         placeholder="first address"
@@ -1192,7 +1224,7 @@ class DonorTable extends Component {
                     </div>
                     <div className="col s12 m4">
                       <input
-                        id="new-donor-middle-address"
+                        id="freezer-donor-middle-address"
                         type="text"
                         name="middle_address"
                         placeholder="middle address"
@@ -1202,7 +1234,7 @@ class DonorTable extends Component {
                     </div>
                     <div className="col s12 m4">
                       <input
-                        id="new-donor-last-address"
+                        id="freezer-donor-last-address"
                         type="text"
                         name="last_address"
                         placeholder="last address"
@@ -1329,7 +1361,7 @@ class DonorTable extends Component {
                     type="submit"
                     className="btn waves-effect waves-light modal-close"
                     onClick={() => {
-                      this.handleRecieverForm();
+                      this.handleFreezerForm();
                     }}
                   >
                     Add to Freezer
@@ -1483,7 +1515,7 @@ class DonorTable extends Component {
                             name="prevDon"
                             onClick={this.handleToggleNumOfDonation}
                           />
-                          <span>N/O Previous Donation</span>
+                          <span>H/O Previous Donation</span>
                         </label>
                       </p>
                     </div>
